@@ -4,7 +4,7 @@ EliCSS is a CSS Framework ! No JQuery used, Only Vanilla CSS and CSS | CSS GRID 
 
 # How to use
 //in html head
-<link rel="stylesheet" href="/path-of-elicss/eli.js">
+'''<link rel="stylesheet" href="/path-of-elicss/eli.js">'''
 
 // before the </body> add script tag
-<script src="/path-of-elicss/eli.js" type="modules"></script>
+'''<script src="/path-of-elicss/eli.js" type="modules"></script>'''
