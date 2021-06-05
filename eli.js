@@ -2,7 +2,7 @@
 
 // let jspath = location.href.substring(0, location.href.lastIndexOf("/")+1);
 //let jspath = "";
-let jspath = "https://cdn.jsdelivr.net/gh/AJ-TechSoul/ELICSS@3.7.1/";
+let jspath = "https://cdn.jsdelivr.net/gh/AJ-TechSoul/ELICSS@3.7.2/";
 
 function toast(){
   let body = document.body;
@@ -52,7 +52,7 @@ async function checkmobility(){
   var favlink = '<link rel="icon" type="image/png" href="'+ jspath +'logo.png">';
   var favlink2 = '<link rel="icon" type="image/png" href="'+favicon+'">';
   if(!document.querySelector('link[rel=icon]')){
-    http = new XMLHttpRequest();
+   var http = new XMLHttpRequest();
     http.open('HEAD', favicon, false); 
     http.send(); 
    // console.log(http.status);
