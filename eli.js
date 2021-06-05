@@ -1,8 +1,8 @@
 /* EliCSS Framework : 0.3.5 */
 
 // let jspath = location.href.substring(0, location.href.lastIndexOf("/")+1);
-let jspath = "";
-// let jspath = "https://cdn.techsoul.in/elicss3.6/";
+//let jspath = "";
+let jspath = "https://cdn.jsdelivr.net/gh/AJ-TechSoul/ELICSS@3.7/";
 
 function toast(){
   let body = document.body;
