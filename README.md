@@ -10,3 +10,6 @@ EliCSS is a CSS Framework ! No JQuery used, Only Vanilla CSS and CSS | CSS GRID 
 
 #Add this line before the </body> add script tag
 <script src="https://cdn.jsdelivr.net/gh/AJ-TechSoul/ELICSS@3.7.1/eli.js" type="module"></script>
+
+# Read Documentation / Tool
+https://elidocs.techsoul.in/ELI-CSS/
