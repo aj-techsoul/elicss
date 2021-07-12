@@ -5,12 +5,36 @@
     --breakpoint-m: 801px;
     --breakpoint-l: 1025px;
     --breakpoint-xl: 1281px;
+
+    --h1 : calc(2rem + 3vw); 
+    --h2 : calc(1.8rem + 2.5vw); 
+    --h3 : calc(1.7rem + 2vw); 
+    --h4 : calc(1.6rem + 1.5vw); 
+    --h5 : calc(1.55rem + 1vw); 
+    --h6 : calc(1.45rem + .7vw);
+    --small : calc(1rem - .15vw);
+    --lineheight: .75;
+
+    --h1-lh : calc(var(--h1) / var(--lineheight));
+    --h2-lh : calc(var(--h2) / var(--lineheight));
+    --h3-lh : calc(var(--h3) / var(--lineheight));
+    --h4-lh : calc(var(--h4) / var(--lineheight));
+    --h5-lh : calc(var(--h5) / var(--lineheight));
+    --h6-lh : calc(var(--h6) / var(--lineheight));
+
+    --g-weight: 400;
+    --h1-3-bold : 400;
+    --h4-6-bold : 400; 
+
+    --letter-space : -.8px;
+    --letter-space-general : .05em;
+    --basefontsize : 16px;
+
 }
-html { scroll-behavior: auto; }
+html { scroll-behavior: auto; font-size:var(--basefontsize); line-height: var(--lineheight); -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;  font-kerning: normal;}
 html[smooth] { scroll-behavior: smooth; }
 * {  box-sizing: border-box; }
-body { margin:0 auto; font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-weight:400;  line-height:1.5; font-size:1rem; overflow-x: hidden; min-height:100vh; box-sizing: border-box;  }
-p { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+body { font-size:1rem; margin:0 auto; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-weight:var(--g-weight);  line-height:var(--lineheight); overflow-x: hidden; min-height:100vh; box-sizing: border-box;  }
 a,*[onclick],.brand,.btn,button { cursor: pointer; }
 
 
@@ -39,17 +63,29 @@ audio:not([controls]) {
 
 /* Typography */
 
-h1,h2,h3,h4,h5,h6,strong,b { margin:0px; font-weight:500;  }
-h1 { font-size:4.2rem; }
-h2 { font-size:3.5rem; }
-h3 { font-size:2.8rem; }
-h4 { font-size:2.2rem; }
-h5 { font-size:1.7rem; }
-h6 { font-size:1.15rem; }
-strong { font-size:1em; }
-p { margin:0 auto; text-align: justify; }
+h1,h2,h3,h4,h5,h6,strong,b { margin:0px; font-weight:500; letter-spacing:var(--letter-space-general); display:block }
+h1,.h1 { font-size:var(--h1); line-height:var(--h1-lh); letter-spacing:var( --letter-space); font-weight: var(--h1-3-bold); }
+h2,.h2 { font-size:var(--h2); line-height:var(--h2-lh); letter-spacing:var( --letter-space);  font-weight: var(--h1-3-bold); }
+h3,.h3 { font-size:var(--h3); line-height:var(--h3-lh); letter-spacing:var( --letter-space); font-weight: var(--h1-3-bold); }
+h4,.h4 { font-size:var(--h4); line-height:var(--h4-lh); letter-spacing:var( --letter-space); font-weight: var(--h4-6-bold); }
+h5,.h5 { font-size:var(--h5); line-height:var(--h5-lh); letter-spacing:var( --letter-space); font-weight: var(--h4-6-bold); }
+h6,.h6 { font-size:var(--h6); line-height:var(--h6-lh); letter-spacing:var( --letter-space); font-weight: var(--h4-6-bold); }
+
+
+@media (max-width:800px){
+img {display: block; max-width:100%; max-height:100%; margin:0 auto; }
+
+}
+
+strong { font-size:1em; font-weight:700; }
+small { font-size:var(--small); font-weight:500; color:rgba(0,0,0,.8); }
+p { margin:0 auto; text-align:left; }
 
 a { text-decoration:none; color:inherit; }
+
+/* Image */
+img.cover { object-fit: cover; object-position: center; }
+img.contain { object-fit: contain; object-position: center; }
 
 
 /* Block */
@@ -121,6 +157,11 @@ header.h1r1 > nav { text-align: center;}
 .nav .spl:hover::before { content:""; opacity:1; border-radius:10%; width:100%; height:100%;  position: absolute; left:0px; bottom:0px; margin:0 auto; }
 .nav .spl:focus::before { background:linear-gradient(90deg, transparent, rgba(0,0,0,.3));  }
 
+/* Sidebar*/
+nav.sidebar:not(is-visible) { display:none;  }
+nav.sidebar.is-visible { display:grid; position:fixed; top:0px; height:100vh; min-width:250px;  left:0px; z-index:3; background:white; color:rgba(0,0,0,.8); overflow:hidden; overflow-y: auto; align-content: start; transition:3s all ease; box-shadow:0px 5px 7px 0px rgba(0,0,0,.1); }
+nav.sidebar  a { padding:.5em 2em; transition:.5s all ease;  }
+nav.sidebar  a:hover { background-color:rgba(0,0,0,.05); }
 
 
 
@@ -141,6 +182,8 @@ header.h1r1 > nav { text-align: center;}
   nav.active:not(.social)::before { position:fixed; top:.5em; right:.5em; content:"\f5ad"; font-family: "Material Design Icons"; color:inherit; cursor:pointer; font-size:1.5em; justify-self: end; color:rgba(255,0,0,.8); text-shadow:1px 1px 3px rgba(0,0,0,.3); }
 
 }
+
+
 
 
 

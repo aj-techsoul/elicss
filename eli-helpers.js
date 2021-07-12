@@ -247,3 +247,33 @@ if(collapsible.length > 0){
 }
 
 // Collapse End
+
+// Copy to Clipboard
+function copyText(element,callback) {
+  if(typeof(element) == 'string'){
+    var element = document.querySelector(element);
+  }
+
+  var range, selection, worked;
+
+  if (document.body.createTextRange) {
+    range = document.body.createTextRange();
+    range.moveToElementText(element);
+    range.select();
+  } else if (window.getSelection) {
+    selection = window.getSelection();        
+    range = document.createRange();
+    range.selectNodeContents(element);
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }
+  
+  try {
+    document.execCommand('copy');
+    console.log('text copied');
+    callback();
+  }
+  catch (err) {
+    console.error('unable to copy text');
+  }
+}

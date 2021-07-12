@@ -1,8 +1,21 @@
-/* EliCSS Framework : 3.7.1 */
+/* EliCSS Framework : 3.8 */
 
-// let jspath = location.href.substring(0, location.href.lastIndexOf("/")+1);
-//let jspath = "";
-let jspath = "https://cdn.jsdelivr.net/gh/AJ-TechSoul/ELICSS@3.7.2/";
+var currentScriptPath = function () {
+
+    var scripts = document.querySelectorAll( 'script[src]' );
+    var currentScript = scripts[ scripts.length - 1 ].src;
+    var currentScriptChunks = currentScript.split( '/' );
+    var currentScriptFile = currentScriptChunks[ currentScriptChunks.length - 1 ];
+
+    return currentScript.replace( currentScriptFile, '' );
+}
+
+var currentPath = function (){
+    return currentScriptPath().replace(window.location.href,'');
+}
+
+let jspath = currentPath();
+// let jspath = "https://cdn.jsdelivr.net/gh/AJ-TechSoul/ELICSS@3.7.2/";
 
 function toast(){
   let body = document.body;
@@ -29,7 +42,7 @@ async function loadScript(url, callback)
     script.src = url;
 
     if(url.search("shoelace") > 0){
-      script.type = "module"; 
+      script.type = "module";
     }
 
     // Then bind the event to the callback function.
@@ -39,6 +52,19 @@ async function loadScript(url, callback)
 
     // Fire the loading
     body.appendChild(script);
+}
+
+async function loadCSS(url)
+{
+    // Adding the script tag to the head as suggested before
+    var head = document.head;
+    var body = document.body;
+    var script = document.createElement('link');
+    script.rel = 'stylesheet';
+    script.href = url;
+
+    // Fire the loading
+    head.appendChild(script);
 }
 
 async function checkmobility(){
@@ -51,11 +77,12 @@ async function checkmobility(){
   var favicon = "assets/img/logo.png";
   var favlink = '<link rel="icon" type="image/png" href="'+ jspath +'logo.png">';
   var favlink2 = '<link rel="icon" type="image/png" href="'+favicon+'">';
+
   if(!document.querySelector('link[rel=icon]')){
    var http = new XMLHttpRequest();
-    http.open('HEAD', favicon, false); 
+    http.open('GET', favicon, false); 
     http.send(); 
-   // console.log(http.status);
+    // console.log(http);
 
     if (http.status === 200) { 
       eli('head').prepend(favlink2);
@@ -69,6 +96,18 @@ async function checkmobility(){
 
       toast();      
       
+
+        // CSS
+        loadCSS(jspath+"eli-grid.css");     
+        loadCSS(jspath+"eli-helpers.css");
+        loadCSS(jspath+'eli-forms.css');
+        loadCSS(jspath+"eli-components.css");
+        loadCSS(jspath+"eli-carousel.css");
+        loadCSS(jspath+"mdi/css/animate.css");
+        loadCSS(jspath+"mdi/css/materialdesignicons.min.css");
+        loadCSS(jspath+"swal/sweetalert2.min.css");
+
+        // JavaScript
         loadScript(jspath+"swal/sweetalert2.all.min.js");
         loadScript(jspath+"eli-library.js");              
         loadScript(jspath+'eli-forms.js');
@@ -78,13 +117,11 @@ async function checkmobility(){
         loadScript(jspath+"eli-components.js");
         loadScript(jspath+"eli-datatemplating.js");
         loadScript(jspath+"eli-image.js");
-        loadScript(jspath+"elislider.js");
-     // loadScript('https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.13/dist/shoelace/shoelace.esm.js');
+        loadScript(jspath+"eli-carousel.js");
 
-//console.log(jspath);
 
 window.addEventListener('load', async function(){
-    new carousel();
+    new elislider();
     new dataTables('.dt');
     new eselect('.eselect');
     new eselect('.etags',{ 
@@ -94,7 +131,9 @@ window.addEventListener('load', async function(){
           taggable:true, 
           maxSelections: 1
         });
-    elislider();    
+
+
+    //  Custom Code
     if(document.querySelector('.input-field')){ 
           document.querySelectorAll('.input-field > label').forEach( function(item, index) {
             item.classList.add('active');

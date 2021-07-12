@@ -75,7 +75,7 @@ if(scriptcontent){
             }
             else
             {
-              //    Materialize.toast(data, 5000,'red');
+              
               const Toast = Swal.mixin({
                 toast: true,
                 position: 'top-end',
