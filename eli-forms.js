@@ -254,7 +254,7 @@ if(type!=='checkbox' && type!='radio' && type!='file' && type!="hidden" && type!
     })
 
 // RADIO FIELD
-    Array.from(document.querySelectorAll('input[type=radio]:not(default)')).forEach((item) => {
+    Array.from(document.querySelectorAll('input[type=radio]:not(.default)')).forEach((item) => {
 
       var label = item.getAttribute('label');
 //      var ricon = item.getAttribute('ricon');
@@ -286,7 +286,7 @@ if(type!=='checkbox' && type!='radio' && type!='file' && type!="hidden" && type!
     })
 
 // Checkbox FIELD
-    Array.from(document.querySelectorAll('input[type=checkbox]:not(default)')).forEach((item) => {
+    Array.from(document.querySelectorAll('input[type=checkbox]:not(.default)')).forEach((item) => {
 
 /*
 <p class="input-checkbox">
@@ -318,7 +318,7 @@ if(type!=='checkbox' && type!='radio' && type!='file' && type!="hidden" && type!
 
 
 // INPUT FILE
-Array.from(document.querySelectorAll('input[type=file]:not(default)')).forEach((item) => {
+Array.from(document.querySelectorAll('input[type=file]:not(.default)')).forEach((item) => {
 
 /*
 <p class="input-file">
@@ -368,7 +368,7 @@ Array.from(document.querySelectorAll('input[type=file]:not(default)')).forEach((
 })
 
 // FIle Input onchange
-Array.from(document.querySelectorAll('input[type=file]:not(default)')).forEach((item) => {
+Array.from(document.querySelectorAll('input[type=file]:not(.default)')).forEach((item) => {
     var label = item.previousSibling;
     var labelVal = item.getAttribute('label');
     item.addEventListener('change', function(e) {
