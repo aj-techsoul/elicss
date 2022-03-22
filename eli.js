@@ -1,4 +1,4 @@
-/* EliCSS Framework : 3.8 */
+/* EliCSS Framework : 4.0.0 */
 
 var currentScriptPath = function () {
 
@@ -14,7 +14,8 @@ var currentPath = function (){
     return currentScriptPath().replace(window.location.href,'');
 }
 
-let jspath = currentPath();
+// let jspath = currentPath();
+let jspath = "assets/elicss-main/";
 // let jspath = "https://cdn.jsdelivr.net/gh/AJ-TechSoul/ELICSS@3.7.2/";
 
 function toast(){
@@ -97,24 +98,29 @@ async function checkmobility(){
       toast();      
       
 
-        // CSS
-        loadCSS(jspath+"eli-grid.css");     
+        // CSS        
+        loadCSS(jspath+"eli-grid.css");
+        loadCSS(jspath+"eli-color.css");
         loadCSS(jspath+"eli-helpers.css");
         loadCSS(jspath+'eli-forms.css');
         loadCSS(jspath+"eli-components.css");
+        loadCSS(jspath+"eli-datatables.css");
+        loadCSS(jspath+"eli-searchable.css");
         loadCSS(jspath+"eli-carousel.css");
         loadCSS(jspath+"mdi/css/animate.css");
         loadCSS(jspath+"mdi/css/materialdesignicons.min.css");
-        loadCSS(jspath+"swal/sweetalert2.min.css");
+        loadCSS(jspath+"sweetalert2.min.css");
 
         // JavaScript
-        loadScript(jspath+"swal/sweetalert2.all.min.js");
+        loadScript(jspath+"sweetalert2.all.min.js");
         loadScript(jspath+"eli-library.js");              
         loadScript(jspath+'eli-forms.js');
         loadScript(jspath+"eli-grid.js");
         loadScript(jspath+"eli-helpers.js");
         loadScript(jspath+"eli-validation.js");
         loadScript(jspath+"eli-components.js");
+        loadScript(jspath+"eli-datatables.js");
+        loadScript(jspath+"eli-searchable.js");
         loadScript(jspath+"eli-datatemplating.js");
         loadScript(jspath+"eli-image.js");
         loadScript(jspath+"eli-carousel.js");
@@ -122,19 +128,10 @@ async function checkmobility(){
 
 window.addEventListener('load', async function(){
     new elislider();
-    new dataTables('.dt');
-    new eselect('.eselect');
-    new eselect('.etags',{ 
-          taggable:true 
-        });
-    new eselect('.etag',{ 
-          taggable:true, 
-          maxSelections: 1
-        });
-
-
+    elitable(".edt").init();
+    setTimeout(function(){ searchable(".eli-searchable").searchable(); searchable(".eli-searchable-select").selectbox() },1000);
     //  Custom Code
-    if(document.querySelector('.input-field')){ 
+    if(document.querySelector('.input-field')){
           document.querySelectorAll('.input-field > label').forEach( function(item, index) {
             item.classList.add('active');
           });

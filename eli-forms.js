@@ -41,16 +41,15 @@ document.querySelectorAll('.tabs a').forEach(item => {
 
     var tabcontent = e.target.getAttribute('href') || e.target.getAttribute('tabhref');
     tabcontent = tabcontent.trim();
-    console.log(tabcontent);
+    // console.log(tabcontent);
     var tabc = document.querySelector(".tab-content"+tabcontent);
-    console.log(tabc);
+    // console.log(tabc);
     if(tabc){
       tabc.classList.add("active");
     }
 
  });
 })
-
 
 // search result
 function searchResultClicked(field){
@@ -59,164 +58,165 @@ function searchResultClicked(field){
 
 // SEARCH FIELD
 
-    var searchInputID = 0;
-    Array.from(document.querySelectorAll('input[type=search]:not(.default)')).forEach((item) => {
-      searchInputID += 1;
-    //
-      var type = item.getAttribute('type');
-      var geturl = item.getAttribute('get');
-      var label = item.getAttribute('label');
-      var licon = item.getAttribute('licon');
-      var ricon = item.getAttribute('ricon');
-      var rtype = item.getAttribute('resulttype');
-      var callback = item.getAttribute('cb');
+//     var searchInputID = 0;
+//     Array.from(document.querySelectorAll('input[type=search]:not(.default)')).forEach((item) => {
+//       searchInputID += 1;
+//     //
+//       var type = item.getAttribute('type');
+//       var geturl = item.getAttribute('get');
+//       var label = item.getAttribute('label');
+//       var licon = item.getAttribute('licon');
+//       var ricon = item.getAttribute('ricon');
+//       var rtype = item.getAttribute('resulttype');
+//       var callback = item.getAttribute('cb');
 
 
 
-      var inputtag = item.outerHTML;
+//       var inputtag = item.outerHTML;
 
-      var inp = '';
-      var gr = '';
-      var inputpadding = 'noinputpadding';
-      if(licon){
-          var inp = inp + '<i class="'+ licon +'"></i>';
-          gr = gr + 'a';
-      }
-      if(label){
-          var inp = inp +  '<label>'+ label +'</label>';
-          inputpadding = '';
-      }
+//       var inp = '';
+//       var gr = '';
+//       var inputpadding = 'noinputpadding';
+//       if(licon){
+//           var inp = inp + '<i class="'+ licon +'"></i>';
+//           gr = gr + 'a';
+//       }
+//       if(label){
+//           var inp = inp +  '<label>'+ label +'</label>';
+//           inputpadding = '';
+//       }
 
-      inp = inp +  item.outerHTML;
-      gr = gr + 1;
-      if(ricon){
-          var inp = inp +  '<i class="'+ ricon +'"></i>';
-          gr = gr + 'a';
-      }
+//       inp = inp +  item.outerHTML;
+//       gr = gr + 1;
+//       if(ricon){
+//           var inp = inp +  '<i class="'+ ricon +'"></i>';
+//           gr = gr + 'a';
+//       }
 
-      var starttag = '<div id="searchInputID'+ searchInputID +'" class="input-field search-field ';
-      var endtag = '</div>';
-      var sresult = '<div class="searchresult '+rtype+'"></div>';
+//       var starttag = '<div id="searchInputID'+ searchInputID +'" class="input-field search-field ';
+//       var endtag = '</div>';
+//       var sresult = '<div class="searchresult '+rtype+'"></div>';
 
-      var finalinput = starttag + inputpadding + ' g'+gr+' ">'+ inp + sresult + endtag;
-      item.outerHTML = finalinput;
+//       var finalinput = starttag + inputpadding + ' g'+gr+' ">'+ inp + sresult + endtag;
+//       item.outerHTML = finalinput;
 
-/////// 2nd Part of Code ///
-          var sid = '#searchInputID'+searchInputID;
-          document.querySelector(sid+' input[type=search]').onkeyup = function(e) {
-            var sresult = e.target.parentElement.querySelector('.searchresult');
-if(e.target.value.length < 3){
-  sresult.innerHTML = "";
-  enableScroll();
-}
-else {
+// /////// 2nd Part of Code ///
+//           var sid = '#searchInputID'+searchInputID;
+//           document.querySelector(sid+' input[type=search]').onkeyup = function(e) {
+//             var sresult = e.target.parentElement.querySelector('.searchresult');
+// if(e.target.value.length < 3){
+//   sresult.innerHTML = "";
+//   enableScroll();
+// }
+// else {
 
-            switch(e.key){
-              case 'ArrowDown':
-// press down to focus
-          sresult.querySelectorAll('.sri').forEach((sri) => {
-              sri.addEventListener('focus', function(e) {
-                sri.onkeydown = function(e){
-                  disableScroll();
-                  if(e.key == 'ArrowDown'){
-                    if(sri.nextSibling){
-                      sri.nextSibling.focus();
-                    }
-                    else {
-                        sresult.previousSibling.focus();
-                    }
-                  }
-                  if(e.key == 'ArrowUp'){
-                    if(sri.previousSibling){
-                      sri.previousSibling.focus();
-                    }
-                    else {
-                        sresult.previousSibling.focus();
-                    }
-                  }
-                  if(e.keyCode == 13) {
-                      sresult.innerHTML = "";
-                      if(sresult.previousSibling){
-                        sresult.previousSibling.value = e.target.innerHTML;
-                      }
-                    //  console.log(e.target.innerHTML);
-                      enableScroll();
-                  }
-                  if(e.keyCode == 27) {
-                      sresult.innerHTML = "";
-                      enableScroll();
-                  }
-                }
-              },true);
-              sresult.querySelector('.sri').focus();
-          });
-
-
-//console.log(document.querySelectorAll('.sri'));
-e.preventDefault();
-              break;
-              default:
-//any text written
-var q = e.target;
-var geturl = q.attributes.get.value;
-var dvr = "";
-if(geturl.indexOf('?') > 0 && geturl.charAt(geturl.length-1) != '&') {
-    dvr = '&';
-}
-else {
-      dvr = '?';
-}
-
-var qval = q.name +'='+ encodeURI(q.value);
-eget(geturl+dvr+qval,'',function(data){
-      var datajson = JSON.parse(data);
-    //  console.log(datajson.length);
-      if(typeof datajson =='object' && datajson.length > 0){
-        sresult.innerHTML = "";
-        //console.log(typeof datajson);
-        datajson.forEach((sr) => {
-
-          sresult.innerHTML += "<a  href='#' class='sri'>"+sr+"</a>";
-        })
-      }
-      else {
-        //console.log(typeof data);
-        sresult.innerHTML = "<a href='#' class='sri'>"+data+"</a>";
-      }
-})
-              break;
-            }
-
-          }
-}
+//             switch(e.key){
+//               case 'ArrowDown':
+// // press down to focus
+//           sresult.querySelectorAll('.sri').forEach((sri) => {
+//               sri.addEventListener('focus', function(e) {
+//                 sri.onkeydown = function(e){
+//                   disableScroll();
+//                   if(e.key == 'ArrowDown'){
+//                     if(sri.nextSibling){
+//                       sri.nextSibling.focus();
+//                     }
+//                     else {
+//                         sresult.previousSibling.focus();
+//                     }
+//                   }
+//                   if(e.key == 'ArrowUp'){
+//                     if(sri.previousSibling){
+//                       sri.previousSibling.focus();
+//                     }
+//                     else {
+//                         sresult.previousSibling.focus();
+//                     }
+//                   }
+//                   if(e.keyCode == 13) {
+//                       sresult.innerHTML = "";
+//                       if(sresult.previousSibling){
+//                         sresult.previousSibling.value = e.target.innerHTML;
+//                       }
+//                     //  console.log(e.target.innerHTML);
+//                       enableScroll();
+//                   }
+//                   if(e.keyCode == 27) {
+//                       sresult.innerHTML = "";
+//                       enableScroll();
+//                   }
+//                 }
+//               },true);
+//               sresult.querySelector('.sri').focus();
+//           });
 
 
+// //console.log(document.querySelectorAll('.sri'));
+// e.preventDefault();
+//               break;
+//               default:
+// //any text written
+// var q = e.target;
+// var geturl = q.attributes.get.value;
+// var dvr = "";
+// if(geturl.indexOf('?') > 0 && geturl.charAt(geturl.length-1) != '&') {
+//     dvr = '&';
+// }
+// else {
+//       dvr = '?';
+// }
 
-    })
+// var qval = q.name +'='+ encodeURI(q.value);
+// eget(geturl+dvr+qval,'',function(data){
+//       var datajson = JSON.parse(data);
+//     //  console.log(datajson.length);
+//       if(typeof datajson =='object' && datajson.length > 0){
+//         sresult.innerHTML = "";
+//         //console.log(typeof datajson);
+//         datajson.forEach((sr) => {
+
+//           sresult.innerHTML += "<a  href='#' class='sri'>"+sr+"</a>";
+//         })
+//       }
+//       else {
+//         //console.log(typeof data);
+//         sresult.innerHTML = "<a href='#' class='sri'>"+data+"</a>";
+//       }
+// })
+//               break;
+//             }
+
+//           }
+// }
 
 
 
+//     })
 
-/*
-    Array.from(document.querySelectorAll('.searchresult')).forEach((item) => {
-        item.addEventListener('click', function (e) {
-          var srval = e.target.value;
-          var srinput = item.closest('div');
-          var inputtag = srinput.getElementsByTagName('input');
-          inputtag[0].value = srval;
 
-          Array.from(document.querySelectorAll('.searchresult')).forEach((item) => {
-            item.remove();
-          })
 
-          //.value = srval;
-        });
-    })
-*/
+
+// /*
+//     Array.from(document.querySelectorAll('.searchresult')).forEach((item) => {
+//         item.addEventListener('click', function (e) {
+//           var srval = e.target.value;
+//           var srinput = item.closest('div');
+//           var inputtag = srinput.getElementsByTagName('input');
+//           inputtag[0].value = srval;
+
+//           Array.from(document.querySelectorAll('.searchresult')).forEach((item) => {
+//             item.remove();
+//           })
+
+//           //.value = srval;
+//         });
+//     })
+// */
 
 
 // INPUT FIELD
     Array.from(document.querySelectorAll('input:not(.default)')).forEach((item) => {
+      if(!item.parentElement.classList.contains("input-field")){
       var type = item.getAttribute('type');
 
       var label = item.getAttribute('label');
@@ -248,14 +248,12 @@ if(type!=='checkbox' && type!='radio' && type!='file' && type!="hidden" && type!
   var finalinput = starttag + inputpadding + ' g'+gr+' ">'+ inp + endtag;
   item.outerHTML = finalinput;
 }
-
-
-
+}
     })
 
 // RADIO FIELD
     Array.from(document.querySelectorAll('input[type=radio]:not(.default)')).forEach((item) => {
-
+      if(!item.parentElement.parentElement.classList.contains("input-radio")){
       var label = item.getAttribute('label');
 //      var ricon = item.getAttribute('ricon');
 
@@ -282,12 +280,12 @@ if(type!=='checkbox' && type!='radio' && type!='file' && type!="hidden" && type!
       var finalinput = inp;
 
       item.outerHTML = finalinput;
-
+    }
     })
 
 // Checkbox FIELD
     Array.from(document.querySelectorAll('input[type=checkbox]:not(.default)')).forEach((item) => {
-
+      if(!item.parentElement.parentElement.classList.contains("input-checkbox")){
 /*
 <p class="input-checkbox">
   <label> <input type="checkbox" label="Checkbox" class="default" name="s" value="">  <span>Checkbox</span> </label>
@@ -313,13 +311,13 @@ if(type!=='checkbox' && type!='radio' && type!='file' && type!="hidden" && type!
       var finalinput = starttag+inp+endtag;
       //var finalinput = inp;
       item.outerHTML = finalinput;
-
+    }
     })
 
 
 // INPUT FILE
 Array.from(document.querySelectorAll('input[type=file]:not(.default)')).forEach((item) => {
-
+if(!item.parentElement.parentElement.classList.contains("input-file")){
 /*
 <p class="input-file">
     <label> <span class="mdi mdi-folder-upload">File Upload</span>
@@ -365,6 +363,7 @@ Array.from(document.querySelectorAll('input[type=file]:not(.default)')).forEach(
   einp = "<p class='input-file' >" +  inp + rinp + "</label>" +  "</p>";
   item.outerHTML = einp;
   //console.log(fileinput);
+}
 })
 
 // FIle Input onchange
@@ -403,7 +402,7 @@ Array.from(document.querySelectorAll('input[type=file]:not(.default)')).forEach(
 // TEXTAREA
 
     Array.from(document.querySelectorAll('textarea:not(.default)')).forEach((item) => {
-
+    if(!item.parentElement.classList.contains("input-field")){
 //console.log(item);
 
       var label = item.getAttribute('label');
@@ -415,7 +414,7 @@ Array.from(document.querySelectorAll('input[type=file]:not(.default)')).forEach(
       }
 
       item.outerHTML = inp;
-
+    }
     })
 
 
@@ -425,7 +424,7 @@ Array.from(document.querySelectorAll('input[type=file]:not(.default)')).forEach(
 
 
     Array.from(document.querySelectorAll('select:not(.default)')).forEach((item) => {
-
+      if(!item.parentElement.classList.contains("input-field")){
       var label = item.getAttribute('label');
       if(label){
           var inp = '<p class="input-field"> <label>'+ label +'</label> '+ item.outerHTML +'</p>';
@@ -435,7 +434,7 @@ Array.from(document.querySelectorAll('input[type=file]:not(.default)')).forEach(
       }
 
       item.outerHTML = inp;
-
+    }
     })
 
 
@@ -582,7 +581,7 @@ Array.from(document.querySelectorAll('input:not(.default)')).forEach((item) => {
 // TEXTAREA
 
 Array.from(document.querySelectorAll('textarea:not(.default)')).forEach((item) => {
-console.log(item.value);
+// console.log(item.value);
   if(item.value.length  > 0){
     item.previousElementSibling.classList.add('active');
   }
@@ -713,6 +712,34 @@ function httpsuccess(ev){
   }
 }
 
+const tabActive = function(href){
+    var hrefid = href.substring(1);
+    var tabbtn = document.querySelector("[id="+hrefid+"]");
+    if(tabbtn){
+      // hide the active tab
+      tabbtn.parentElement.querySelector(".tab-content.active").classList.remove("active");
+      // show the tab
+      var tablinks = document.querySelectorAll("[href='"+href+"']");
+      var tablinksactive = document.querySelector(".tabs li.active");
+      console.log(tablinksactive);
+      if(tablinksactive?.querySelector('a').getAttribute('href') != href ){
+          tablinksactive?.classList.remove('active');
+      }
+      // console.log(tablinks);
+      tablinks?.forEach(tl => {
+        if(tl.parentElement.nodeName == 'LI'){
+          tl.parentElement.classList.add('active');
+        }
+        else
+        {
+          tl.classList.add('active');
+        }
+        
+      })
+      tabbtn.classList.add("active");
+    }
+    
+}
 
 
 

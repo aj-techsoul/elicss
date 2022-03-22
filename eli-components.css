@@ -81,7 +81,7 @@ left: 0;
 width: 150%;
 list-style: none;
 text-align: left;
-color: rgba(0,0,0,.8); border-radius: var(--radius); border:1px solid rgba(0,0,0,.1); transistion:.5s height ease-in-out;  }
+color: rgba(0,0,0,.8); border-radius: var(--radius); border:1px solid rgba(0,0,0,.1); transition:.5s height ease-in-out;  }
 .btn-dropdown > .dropdown.is-visible li { padding:.5em 1em; }
 .btn-dropdown > .dropdown.is-visible li:empty { padding:0px; border-top:1px solid var(--bordercolor); height:0px;  margin:0rem 0px;  }
 .btn-dropdown > .dropdown.is-visible li:hover { background:rgba(0,0,0,.05);  }

@@ -1,7 +1,19 @@
 
 	var imgfields = document.querySelectorAll('.imgoptimize');	
+	var ddpfields = document.querySelectorAll('.input-dragdrop');	
+
+
 	if(imgfields.length > 0){
-	//console.log(imgfields.length);
+		init(imgfields);	
+	}
+
+	if(ddpfields.length > 0){
+		init2(ddpfields);	
+	}
+
+
+function init(imgfields){
+//console.log(imgfields.length);
 	imgfields.forEach(function(item){
 		item.addEventListener('change',async function(e){			
 			var field = e.target;			
@@ -30,13 +42,12 @@
 		 			'preview': preview || '',
 		 			'textarea': textarea || ''
 		 		},function(optimg,options,file){
-		 			//console.log(options.preview);
+		 			// console.log(options.preview);
 		 			if(options.preview){
 		 				var previewbox = document.querySelector(preview);
 						previewbox.insertAdjacentHTML("beforeend","<img src='"+optimg+"' alt='optimized'>");
 		 			}
 		 			// add the dataurl (optimg) in json and put that json inside the textarea
-		 			
 
 		 			var inputfieldjson = { 'name':file.name, 'data':optimg, 'type':options.imgtype, 'exifdata':file.exifdata };
 		 			jsoninputfile(options.textarea,inputfieldjson);
@@ -46,7 +57,116 @@
 			}
 			// console.log(item.files.length);
 		})
-	})
+	})	
+}
+
+function init2(imgfields,append){
+	append = append || true;
+// console.log(imgfields.length);
+	imgfields.forEach(function(item){
+		item.addEventListener('change',async function(e){				
+			var field = e.target;			
+			var maxwidth = field.getAttribute('maxwidth');
+			var quality = field.getAttribute('quality');
+			var exportimgtype = field.getAttribute('exportimgtype');
+			var preview = field.getAttribute('preview');
+			var controls = field.getAttribute('controls');
+			var textarea = field.getAttribute('data');
+			// resetting 
+			// alert(item.files.length);
+			if(!append){
+				document.querySelector(textarea).innerHTML = "";
+				document.querySelector(preview).innerHTML = "";
+			}
+			//alert("passed");
+			// console.log(item.files);
+			// alert(item.files.length);
+			// alert(preview);
+			let imgsitems = document.querySelectorAll(preview+" .imgitem");
+			// alert(item.files.length);
+
+			for (var i = 0; i < item.files.length; i++) {				
+				// -- Making Dataurl -- //
+				var indx = imgsitems.length + i;
+				console.log(item.files[i]);
+				// console.log(indx);
+				file = item.files[i];
+				
+				EXIF.getData(file);
+
+				// check maxlength
+
+				// Crop
+
+				// controls 
+
+				// delete
+
+				// info							
+		 		var optimg = await optimizeImg(file,{
+		 			'maxwidth': maxwidth || '800px',
+		 			'imgquality': quality || 100,
+		 			'imgtype': exportimgtype || 'image/png',
+		 			'preview': preview || '',
+		 			'textarea': textarea || '',
+		 			'indxx': i,
+		 			'imgfield' : imgfields
+		 		},function(optimg,options,file){
+		 			
+		 			if(controls){
+		 				var imgctrl = "<div class='imgcontrol'> <span onclick=\"imgdelete(this,'"+textarea+"','"+ options.indxx +"','"+options+"')\" class='delete mdi mdi-close'></span> <span class='crop mdi mdi-crop' onclick='cropzone(this)'></span> <span class='primary mdi mdi-check-circle' onclick='makeitprimary(this)'></span></div>";
+		 			}
+		 			else
+		 			{
+		 				var imgctrl = "";
+		 			}
+		 			// console.log(options.preview);
+		 			if(options.preview){
+		 				var previewbox = document.querySelector(preview);
+						previewbox.insertAdjacentHTML("beforeend","<div class='imgitem'><img src='"+optimg+"' alt='optimized'>"+imgctrl+"</div>");
+		 			}
+		 			// add the dataurl (optimg) in json and put that json inside the textarea
+		 			// file.exifdata = file.exifdata || "";
+		 			// var inputfieldjson = { 'name':file.name, 'data':optimg, 'type':options.imgtype, 'exifdata':file.exifdata };
+		 			// console.log(inputfieldjson);
+		 			// jsoninputfile(options.textarea,inputfieldjson);
+		 			//console.log(inputfieldjson);
+		 			console.clear();
+		 		});
+				//		
+			}
+			// console.log(item.files.length);
+		})
+	})	
+}
+
+function imgdelete(field,textarea,index,options){
+
+	console.log(options);
+
+	index = parseInt(index);
+	console.log(index);
+	var txtar = document.querySelector(textarea);
+	var data = JSON.parse("["+txtar.value+"]");
+	// console.log(field.closest('.imgitem'));
+		// remove from data 		
+		const indexremove = data.indexOf(index);		
+		if (data[index]) {
+		  data.splice(index, 1);
+		}
+		// remove [] from start and end
+		var datastring = JSON.stringify(data);
+		datastring = datastring.substring(1);
+		
+
+		datastring = datastring.substring(0, datastring.length - 1);
+		// put back to javascript
+		// txtar.value = "";
+		txtar.value = datastring;
+		if(datastring == ""){
+			// imgfields.value = "";
+		}		
+	field.closest(".imgitem").remove();
 }
 
 function optimizeImg(file,options,callback){
@@ -92,22 +212,126 @@ function optimizeImg(file,options,callback){
 
 }
 
-function jsoninputfile(textarea,jsondata){
+function makeitprimary(field){
+	if(!field.parentElement.parentElement.classList.contains('active')){
+		document.querySelectorAll(".imgitem.active")?.forEach(itm => {
+			itm.classList.remove("active");
+		})
+
+		setTimeout(function(){
+			field.parentElement.parentElement.classList.add('active');
+		},100);
+	}
+}
+
+function uploadCropped(callback){
+	var inputfile = document.querySelector(".input-dragdrop");
+	var previewbox = inputfile.getAttribute("preview");
+	var txtarea = inputfile.getAttribute("data");
+	if(previewbox && txtarea){
+		var allimgs = document.querySelectorAll(previewbox+" .imgitem > img");
+		if(allimgs.length > 0){
+			document.querySelector(txtarea).value = "";
+			allimgs.forEach(aimg => {
+				$primary = false;
+				if(aimg.parentElement.classList.contains('active')){
+					$primary = true;
+				}
+				var randname = Math.random().toString(36).slice(2);	
+				var jsondata = { 'name':randname, 'data':aimg.src, 'type':'image/png', 'exifdata':'', 'primary':$primary };
+				jsoninputfile(txtarea,jsondata);
+			})
+
+
+			if(callback){
+				callback();
+			}
+		}
+		else
+		{
+			Swal.fire({
+                  position: 'center',
+                  type: 'info',
+                  title: "Kindly upload some images",
+                  showConfirmButton: false,
+                  timer: 2000
+                })
+		}
+	}
+	else
+	{
+		console.log("input-dragdrop doesnt have attr of preview or data");
+	}
+}
+
+
+function cropzone(field,modalid,cwidth){
+	cwidth = cwidth || '400';
+	modalid = modalid || '#cropp';
+	// console.log();
+	var imgx = field.parentElement.parentElement.querySelector('img');
+	var cropped = document.querySelector("#cropimg");
+	cropped.src = imgx.src;
+	modal(modalid,'open');
+	// console.log(typeof cropperObj);
+	
+	let cropperObj = new Cropper(document.querySelector("#cropimg"), {
+		  aspectRatio: 1/1,
+		  viewMode: 1,
+		  crop(event) {		  			  	
+		    // console.log(event.detail.x);
+		    // console.log(event.detail.y);
+		    // console.log(event.detail.width);
+		    // console.log(event.detail.height);
+		    // console.log(event.detail.rotate);
+		    // console.log(event.detail.scaleX);
+		    // console.log(event.detail.scaleY);		    
+		 	}
+		})
+	// Save
+	// save on click
+	var save = document.querySelector(modalid+" #savecpic");
+save.addEventListener('click',(event)=>{
+  // get result to data uri
+  let imgSrc = cropperObj.getCroppedCanvas({
+		width: cwidth
+	}).toDataURL();
+  // remove hide class of img
+  cropped.classList.remove('hide');  	
+	modal(modalid,'close');
+	// show image cropped
+  cropped.src = imgSrc;
+  imgx.src = imgSrc;
+
+  // dwn.classList.remove('hide');
+  // dwn.download = 'imagename.png';
+  // dwn.setAttribute('href',imgSrc);  
+	cropperObj.destroy();
+	setTimeout(console.clear(),1000);
+});
+}
+
+
+
+function jsoninputfile(textarea,jsondata){	
 	var txtar = document.querySelector(textarea);
+	
 	if(txtar){
 		if(typeof jsondata == 'object'){
 			jsondata = JSON.stringify(jsondata);
 		}
-		var olddata = txtar.innerHTML;
-		if(olddata){
-			document.querySelector(textarea).innerHTML = olddata+","+jsondata;	
+		var olddata = txtar.value;
+
+		if(olddata){			
+			document.querySelector(textarea).value = olddata+","+jsondata;	
 			//var od = document.querySelector(textarea).innerHTML;
-			//console.log(JSON.parse("["+od+"]"));
+			//console.log(JSON.parse("["+od+"]"));			
 		}
 		else
 		{
-			document.querySelector(textarea).innerHTML = jsondata;
+			document.querySelector(textarea).value = jsondata;
 		}
+		// document.write("["+document.querySelector(textarea).innerHTML+"]");
 	}
 	else
 	{

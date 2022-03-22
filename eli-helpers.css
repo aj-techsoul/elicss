@@ -1384,8 +1384,8 @@ body { padding:0px; margin:0px auto; line-height:1.5; font-size:1rem;  }
 	font-size:1.5em;
 }
 
-.collapse-header:not(active)::after { content:"\f415"; font-family:"Material Design Icons"; color:rgba(0,0,0,.5); font-size:1.5em; }
-.collapse-header.active::after { content:"\f374"; font-family:"Material Design Icons"; color:rgba(0,0,0,.5); font-size:1.5em; }
+.collapse-header:not(active)::after { content:"\f0415"; font-family:"Material Design Icons"; color:rgba(0,0,0,.5); font-size:1.5em; }
+.collapse-header.active::after { content:"\f0374"; font-family:"Material Design Icons"; color:rgba(0,0,0,.5); font-size:1.5em; }
 
 .collapse-body {   -moz-transition: .35s all ease;
   -webkit-transition: .35s all ease;

@@ -50,7 +50,7 @@ input { text-align:justify; transition:.5s all;  }
 input:focus { text-align:justify; }
 input,select,textarea { font-family:sans-serif; font-size:1rem;  }
 
-.input-field { background:rgba(255,255,255,1); border:2px solid rgba(0,0,0,.1); position: relative; padding:0em; border-radius:var(--radius); transition:2s all; display: grid; align-items: center; margin:var(--margin); }
+.input-field { background:rgba(255,255,255,1); border:2px solid rgba(0,0,0,.1); position: relative; padding:0em; border-radius:var(--radius); transition:.3s all; display: grid; align-items: center; margin:var(--margin); -webkit-transition:.3s all; -moz-transition:.3s all; -ms-transition:.3s all; -o-transition:.3s all; }
 .input-field:hover,.input-field:focus { border-color: var(--input-border-color); }
 
 .input-field.invert { background:inherit; }
@@ -68,7 +68,7 @@ input,select,textarea { font-family:sans-serif; font-size:1rem;  }
 .input-field input { background:transparent; width:100%; display: block; padding:.5em; border:none; outline:none; font-size:1em; min-height:var(--input-min-height); padding-top:1em; }
 .input-field.noinputpadding input:focus,.input-field.noinputpadding input { padding-top:.5em!important; }
 
-.input-field textarea { background:transparent; width:100%; display: block; padding:.5em;  padding-top:1em; border:none; outline:none; font-size:1em; resize: vertical; min-height:var(--input-min-height); padding-top:1em;  }
+.input-field textarea { background:transparent; width:100%; display: block; padding:.5em;  padding-top:1.5em !important; border:none; outline:none; font-size:1em; resize: vertical; min-height:var(--input-min-height); padding-top:1em;  }
 
 .input-field select { all:unset;  background:transparent; width:100%; display: block; padding:.5em;  padding-top:1em; padding-bottom:.3em; border:none; outline:none; font-size:1em;  padding-top:1em;  }
 
@@ -143,13 +143,13 @@ label.radio-field input[type=radio]:not(default) {
   color:inherit;
 }
 label.radio-field input[type=radio]:before {
-  content:'\f130';
+  content:'\f0130';
   font-family:"Material Design Icons";
   color:inherit;
   font-size:2em;
 }
 label.radio-field input[type=radio]:checked:before {
-  content:'\f5e0';
+  content:'\f05e0';
   font-family:"Material Design Icons";
   color:var(--input-border-color);
 }
@@ -167,25 +167,25 @@ label.radio-field input[type=radio]:checked:before {
   outline: none;
 }
 .input-checkbox input[type=checkbox]::before {
-  content:'\f131';
+  content:'\f0131';
   font-family:"Material Design Icons";
   color:#222;
   font-size:2em;
 }
 .input-checkbox input[type=checkbox]:checked::before {
-  content:'\f132';
+  content:'\f0132';
   font-family:"Material Design Icons";
   color:var(--input-border-color);
 }
 
 .input-checkbox input[type=checkbox].outline:checked::before {
-  content:'\f135';
+  content:'\f0135';
   font-family:"Material Design Icons";
   color:var(--input-border-color);
 }
 
 .input-checkbox input[type=checkbox].circle:checked::before {
-  content:'\f133';
+  content:'\f0133';
   font-family:"Material Design Icons";
   color:var(--input-border-color);
 }

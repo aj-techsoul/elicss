@@ -21,7 +21,7 @@ function eli(selector){
         appendbefore: (htmlelement) => self.element.forEach((el) => {
             el.insertAdjacentHTML('beforebegin', htmlelement);
         }),
-        submit : (callback) => esend(selector,function(){
+        submit : (callback) => esend(selector,function(data){
           //  console.log(data);
           //  document.querySelector('.result').innerHTML = data;
             var tag = 'Success';
@@ -31,7 +31,7 @@ function eli(selector){
 ///////
 //
 var temp = document.createElement("div");
-temp.innerHTML = data;
+temp.innerHTML = data.result;
 var script = temp.getElementsByTagName("script");
 if(script[0]){
 scriptcontent = script[0].innerHTML;
@@ -44,7 +44,7 @@ if(scriptcontent){
 
 
         //    var title = data.match("<script>(.*?)</script>")[1];
-        //     console.log(title);
+            // console.log(title);
 
 
             if(callback){
@@ -52,14 +52,14 @@ if(scriptcontent){
             }
 
 
-            if(data.indexOf(tag) !== -1){
-              //  console.log(data);
+            if(data.result.indexOf(tag) !== -1){
+              //  console.log(data.result);
                             //   Materialize.toast(data, 5000,'green');
                 const Toast = Swal.mixin({
                 toast: true,
                 position: 'top-end',
                 showConfirmButton: false,
-                timer: 1000,
+                timer: 1500,
                 timerProgressBar: true,
                 onOpen: (toast) => {
                 toast.addEventListener('mouseenter', Swal.stopTimer)
@@ -69,7 +69,7 @@ if(scriptcontent){
 
                 Toast.fire({
                 icon: 'success',
-                title: data
+                title: data.result
                 })
 
             }
@@ -90,7 +90,7 @@ if(scriptcontent){
 
               Toast.fire({
                 icon: 'error',
-                title: data
+                title: data.result
               })
 
             }
@@ -145,6 +145,14 @@ if(scriptcontent){
     xhttp.send(senddata);
  }
 
+function isJson(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
 
 
 function esend(formid,callback){
@@ -176,8 +184,25 @@ function esend(formid,callback){
         if (this.readyState == 4 && this.status == 200) {
              data = this.responseText;
              if(callback){
-             //  data = JSON.parse(data);
-               callback(data);
+              if(isJson(data)){
+                data = JSON.parse(data);
+              }
+              // 
+             console.log(typeof data);
+
+
+              if(typeof data == 'object'){
+
+                var retdata = data.data || null;
+                var retresult = data.result || null;
+              }
+              else
+              {
+                var retdata = null;
+                var retresult = data || null;
+              }
+              var ret = { 'data':retdata,'result':retresult };
+               callback(ret);
              }
           }
         };
@@ -186,24 +211,25 @@ function esend(formid,callback){
 
        if(progressbar){
          xhttp.onprogress = function (e) {
-           console.log(e);
+          //  console.log(e);
              if (e.lengthComputable) {
               total = progressbar.attributes.max.value;
               var cdiff = total / e.total;
               var progressvalue = e.loaded * cdiff;
 
                 progressbar.attributes.value.value = progressvalue;
-                  console.log(progressvalue);
-                // console.log(e.loaded+  " / " + e.total);
+                  // console.log(progressvalue);
+                console.log(e.loaded+  " / " + e.total);
              }
          }
        }
 
        xhttp.onloadstart = function (e) {
-          // console.log("start")
+          console.log("start")
        }
        xhttp.onloadend = function (e) {
-          // console.log("end")
+          console.log("end")
+          // console.clear();
        }
 
     // xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -227,13 +253,13 @@ function delrow(field,row){
     var tbl = field.getAttribute('data-action');
     var action = "p/delrow/"+field.getAttribute('data-action');
     epost(action,'id='+did,function(data){
-        //console.log(data);
+        // console.log(data);
         var tag = 'Success';
 
                   // $('.result').html("");
                     
  if(data.indexOf(tag) !== -1){
-              //  console.log(data);
+               console.log(data);
               // hide the row
                     if(row){
                       document.querySelector(row+did).style.display = 'none';
@@ -284,7 +310,7 @@ function delrow(field,row){
   }
   else
   {
-   // console.log("You cancelled");
+   console.log("You cancelled");
   }
 });
 }
@@ -305,12 +331,12 @@ function statusupdate(field){
     data = JSON.parse(data);
     if(data.success){
       var tag = 'Successfully';
-      //console.log(data);
+      // console.log(data);
         if(data.message.indexOf(tag) != -1){
             switch(dvalue){
                 case '1':
                   // make it inactive
-                  field.innerHTML = 'Inctive';
+                  field.innerHTML = 'Inactive';
                   field.classList.add('red');
                   field.classList.remove('green');
                   field.setAttribute('data-value',0);
@@ -346,16 +372,16 @@ function statusupdate(field){
               var data = data;
               data.trim();
               data = data.replace(/\u0/,'');
-           //   console.log(data);
+            //  console.log(data);
               data = JSON.parse(data);
             //  console.log(data.id);
               // reset form values from json object
               if(data.id){
                for (const [name, valu] of Object.entries(data)) {
-              //      console.log(name, valu);
+                  //  console.log(name, valu);
 
                   var el = editform.querySelectorAll('[name="'+name+'"]');
-                 // console.log(el[0]);
+                //  console.log(el[0]);
                       if(el.length > 0){                        
                           type = el[0].type;
 
@@ -421,16 +447,16 @@ function getData(action,senddata='',embedtoid,processto){
               var data = data;
               data.trim();
               data = data.replace(/\u0/,'');
-           //   console.log(data);
+             console.table(data);
               data = JSON.parse(data);
-            //  console.log(data.id);
+             console.log(data.id);
               // reset form values from json object
               if(data.id){
                for (const [name, valu] of Object.entries(data)) {
-              //      console.log(name, valu);
+                   console.log(name, valu);
 
                   var el = editform.querySelectorAll('[name="'+name+'"]');
-                 // console.log(el[0]);
+                 console.log(el[0]);
                       if(el.length > 0){                        
                           type = el[0].type;
 
@@ -469,3 +495,129 @@ function getData(action,senddata='',embedtoid,processto){
           }
         });
     }
+
+
+
+
+
+function updatetrtd(data,container="table.edt > tbody",rowid=""){
+    var data = data.data;
+
+    if(rowid){
+        // alert("update");
+        //update
+        var tcontainer = document.querySelector(rowid);
+          // console.log(tcontainer);     
+        var tmpl = tcontainer.parentNode.querySelector(' tr[template]').innerHTML;
+        setData(data,tmpl,tcontainer,false);
+       
+    }
+    else
+    {
+        //add new
+        var tcontainer = document.querySelector(container);
+        // console.log(tcontainer);
+        var tmpl = tcontainer.querySelector("tr[template]").outerHTML;
+        console.log(tmpl);
+        setData(data,tmpl,tcontainer,true);
+    }
+}
+
+function modalSubmit(formid,options,callback){
+      
+      
+    let formdom = document.querySelector(formid);
+    var modalid =  modalid || options?.modalid || "#"+formdom.closest('.modal.active').id;
+    
+    var  rowcolumn = options?.rowcolumn?.name || 'id';
+    var  tablebody = options?.tablebody || 'table.edt > tbody';
+
+    if(formdom.querySelector("[name="+rowcolumn+"]") && formdom.querySelector("[name="+rowcolumn+"]").value){
+    // do changes in the table
+    
+    
+    // console.log(rowcolumn);
+
+    var fieldid = formdom.querySelector("[name="+rowcolumn+"]").value || null;  
+    var rowid = options?.rowid+fieldid || "#row"+fieldid;
+    }
+
+    formvalidate(formid) ? eli(formid).submit(function(data){
+        console.log(data);
+        var tag = 'Success';
+        if(data.result.indexOf(tag) !== -1){
+            // Successfull
+
+            if(document.querySelector("table.edt tr"+rowid)){
+                // change
+                var trrow = document.querySelector("table.edt tr"+rowid);
+                var rowdata = data.data;
+                // console.log(rowdata);
+                updatetrtd(data,tablebody,rowid);
+                // todo: get the row head,for loop create tds and replace with rowida
+                
+            }
+            else
+            {
+                // add a row
+                updatetrtd(data,tablebody);
+            }
+ 
+            // just close the modal
+            modal(modalid,'close');
+
+        }
+        else{
+            // not successfull
+        }
+
+      if(callback){
+        callback();
+      }        
+    }) : console.log("Form not filled properly");
+}
+
+
+function wizardSubmit(formid,nextTabhref,options,callback){
+
+    let formdom = document.querySelector(formid);
+    // var modalid =  modalid || options?.modalid || "#"+formdom.closest('.modal.active').id;
+    
+    var  rowcolumn = options?.rowcolumn?.name || 'id';
+
+    if(formdom.querySelector("[name="+rowcolumn+"]") && formdom.querySelector("[name="+rowcolumn+"]").value){
+    // do changes in the table
+    
+    
+    // console.log(rowcolumn);
+
+    var fieldid = formdom.querySelector("[name="+rowcolumn+"]").value || null;  
+    var rowid = options?.rowid || "#row"+fieldid;
+
+    }
+
+    formvalidate(formid) ? eli(formid).submit(function(data){
+        console.log(data);
+        var tag = 'Success';
+        if(data.result.indexOf(tag) !== -1){
+            // Successfull
+            if(nextTabhref){
+              tabActive(nextTabhref);
+            }
+            else
+            {
+              console.log("");
+
+            }            
+
+        }
+        else{
+            // not successfull
+            console.log("Failed to Success");
+        }
+
+      if(callback){
+        callback();
+      }        
+    }) : console.log("Form not filled properly");
+}

@@ -1,0 +1,28 @@
+:root {  
+    --select-tag : rgba(0,0,0,.1);
+    --select-tag-selected : var(--btn-color);
+    --select-tag-selected-text : white;
+    --select-box-shadow : var(--card-shadow-hover);
+}
+
+.eli-searchable-select-container { display: none; position: relative; }
+.eli-searchable-select-container.active, .eli-searchable-select-container:focus-within { position: absolute; top:calc(var(--input-min-height) + .5em); width:100%; padding: .2em; animation:slideIn .5s ease-in-out; display:grid; background:white; border-radius:var(--radius); z-index:3; border:1px solid rgba(0,0,0,.1); box-shadow:var(--select-box-shadow);}
+.eli-searchable-select-container.active .eli-searchable-select-optionsbox, .eli-searchable-select-container:focus-within .eli-searchable-select-optionsbox { display: grid; }
+.eli-searchable-select-container.active .eli-searchable-select-optionsbox a,.eli-searchable-select-container:focus-within .eli-searchable-select-optionsbox a { animation:fadeInDown .3s ease-in-out; display: grid; grid-auto-flow:column; justify-content: start; grid-gap:.5em; padding:.2em .5em; }
+.eli-searchable-select-container .eli-searchable-select-optionsbox a:hover,.eli-searchable-select-container .eli-searchable-select-optionsbox a:focus,.eli-searchable-select-container .eli-searchable-select-optionsbox a:active { background:rgba(0,0,0,.05); border-radius: var(--radius); }
+.eli-searchable-select-container .eli-searchable-select-optionsbox { max-height:100px; overflow: hidden; overflow-y: auto; }
+
+.eli-searchable-select-container .eli-searchable-select-searchbox.default,.eli-searchable-select-tag-container .eli-searchable-select-tag-searchbox.default { border-bottom:1px solid rgba(0,0,0,0.1); border-radius:0px; }
+.eli-searchable-select-container .eli-searchable-select-searchbox.default {  position: relative; padding-top:0px; padding:.5em 1em; max-height:var(--input-min-height); }
+
+.eli-searchable-select[multiple] { display: none; }
+.eli-searchable-select-tag-container .eli-searchable-select-tag-options { padding:.25em; display: grid; grid-auto-flow: column; overflow-x:auto; justify-content: start; max-width:calc(70vw - 5em); }
+.eli-searchable-select-tag-container .eli-searchable-select-tag-options > li > strong { display:inline-block; }
+.eli-searchable-select-tag-container .eli-searchable-select-tag-options > li { animation:fadeInLeft .3s ease-in-out; border-radius:var(--radius); cursor:pointer; display:inline-block; padding:.5em 1em; white-space:nowrap; background:var(--select-tag); margin:.25em; }
+.eli-searchable-select-tag-container .eli-searchable-select-tag-options > li.selected { background:var(--select-tag-selected); color:var(--select-tag-selected-text); }
+.eli-searchable-select-tag-container .eli-searchable-select-tag-options > li.disabled { opacity:.5; cursor:none; pointer-events: none; }
+.eli-searchable-select-tag-container .eli-searchable-select-tag-options > li > * { pointer-events:none; }
+
+.eli-searchable-select-tag-searchbox.default {  position: relative; padding:.5em 1em; max-height:var(--input-min-height); margin: var(--margin); border:1px solid rgba(0,0,0,0.1); border-radius:var(--radius); }
+.eli-searchable-select.no-search .eli-searchable-select-tag-searchbox { display:none; }
+
