@@ -5,10 +5,10 @@ EliCSS is a CSS Framework ! No JQuery used, Only Vanilla CSS and CSS | CSS GRID 
 # How to use
 
 #### CDN
-https://cdn.jsdelivr.net/gh/aj-techsoul/elicss@4.0/eli.min.js
+https://cdn.jsdelivr.net/gh/aj-techsoul/elicss@4.0.1/eli.min.js
 
 # Add this line before the </body> add script tag
-<script src="https://cdn.jsdelivr.net/gh/aj-techsoul/elicss@4.0/eli.min.js" ></script>
+<script src="https://cdn.jsdelivr.net/gh/aj-techsoul/elicss@4.0.1/eli.min.js" ></script>
 
 # Read Documentation / Tool
 https://elidocs.techsoul.in/ELI-CSS/
