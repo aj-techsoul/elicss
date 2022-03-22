@@ -15,8 +15,8 @@ var currentPath = function (){
 }
 
 // let jspath = currentPath();
-let jspath = "assets/elicss-main/";
-// let jspath = "https://cdn.jsdelivr.net/gh/AJ-TechSoul/ELICSS@3.7.2/";
+// let jspath = "assets/elicss-main/";
+let jspath = "https://cdn.jsdelivr.net/gh/aj-techsoul/elicss@4.0/";
 
 function toast(){
   let body = document.body;
