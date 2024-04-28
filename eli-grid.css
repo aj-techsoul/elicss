@@ -22,9 +22,9 @@
     --h5-lh : calc(var(--h5) / var(--lineheight));
     --h6-lh : calc(var(--h6) / var(--lineheight));
 
-    --g-weight: 400;
-    --h1-3-bold : 400;
-    --h4-6-bold : 400; 
+    --g-weight: 500;
+    --h1-3-bold : 700;
+    --h4-6-bold : 500; 
 
     --letter-space : -.8px;
     --letter-space-general : .05em;
