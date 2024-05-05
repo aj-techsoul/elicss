@@ -14,7 +14,7 @@ const currentScriptPath = () => {
 
 const currentPath = () => {
   const currentPath = currentScriptPath().slice(location.origin);
-  return currentPath
+  return currentPath+"/";
 }
 
 const jspath = currentPath();
