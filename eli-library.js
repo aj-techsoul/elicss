@@ -111,7 +111,7 @@ if(scriptcontent){
     xhttp.onreadystatechange = function() {
      if (this.readyState == 4 && this.status == 200) {
       //return this.responseText;
-      format = format.toUpperCase();
+      var format = format.toUpperCase();
           switch(format){
             case "JSON":
               data = JSON.parse(this.responseText);
@@ -367,7 +367,7 @@ function statusupdate(field){
       var senddata = "id="+id+"&csrf="+csrf+"&tbl="+tbl+"&uid="+uid;
      // alert(action);
       epost("API/"+action,senddata, function(data){
-          if(data)
+          if(data != 'null')
           {
               var data = data;
               data.trim();
@@ -410,13 +410,13 @@ function statusupdate(field){
           }
           else
           {
-            Swal.fire({
-                  position: 'top-end',
-                  type: 'success',
-                  title: 'Unable to load data',
-                  showConfirmButton: false,
-                  timer: 1500
-                })
+            // Swal.fire({
+            //       position: 'top-end',
+            //       type: 'success',
+            //       title: 'Unable to load data',
+            //       showConfirmButton: false,
+            //       timer: 1500
+            //     })
           }
         });
     }
@@ -447,7 +447,7 @@ function getData(action,senddata='',embedtoid,processto){
               var data = data;
               data.trim();
               data = data.replace(/\u0/,'');
-             console.table(data);
+             console.log(data);
               data = JSON.parse(data);
              console.log(data.id);
               // reset form values from json object
@@ -506,9 +506,8 @@ function updatetrtd(data,container="table.edt > tbody",rowid=""){
     if(rowid){
         // alert("update");
         //update
-        var tcontainer = document.querySelector(rowid);
-          // console.log(tcontainer);     
-        var tmpl = tcontainer.parentNode.querySelector(' tr[template]').innerHTML;
+        var tcontainer = document.querySelector(container+" "+rowid);
+        var tmpl = document.querySelector(container+' tr[template]').innerHTML;
         setData(data,tmpl,tcontainer,false);
        
     }
@@ -516,9 +515,7 @@ function updatetrtd(data,container="table.edt > tbody",rowid=""){
     {
         //add new
         var tcontainer = document.querySelector(container);
-        // console.log(tcontainer);
-        var tmpl = tcontainer.querySelector("tr[template]").outerHTML;
-        console.log(tmpl);
+        var tmpl = tcontainer.querySelector(" tr[template]").outerHTML;
         setData(data,tmpl,tcontainer,true);
     }
 }
@@ -539,11 +536,11 @@ function modalSubmit(formid,options,callback){
     // console.log(rowcolumn);
 
     var fieldid = formdom.querySelector("[name="+rowcolumn+"]").value || null;  
-    var rowid = options?.rowid+fieldid || "#row"+fieldid;
+    var rowid = options?.rowid || "#row"+fieldid;
     }
 
     formvalidate(formid) ? eli(formid).submit(function(data){
-        console.log(data);
+        // console.log(data);
         var tag = 'Success';
         if(data.result.indexOf(tag) !== -1){
             // Successfull
@@ -553,14 +550,14 @@ function modalSubmit(formid,options,callback){
                 var trrow = document.querySelector("table.edt tr"+rowid);
                 var rowdata = data.data;
                 // console.log(rowdata);
-                updatetrtd(data,tablebody,rowid);
+                updatetrtd(data,'table.edt > tbody',rowid);
                 // todo: get the row head,for loop create tds and replace with rowida
                 
             }
             else
             {
                 // add a row
-                updatetrtd(data,tablebody);
+                updatetrtd(data);
             }
  
             // just close the modal
@@ -576,6 +573,150 @@ function modalSubmit(formid,options,callback){
       }        
     }) : console.log("Form not filled properly");
 }
+
+
+async function fetchData(url,callback) {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await response.text();
+    
+    if(callback){
+      callback(data);
+    }
+    return data;
+    } catch (error) {
+    console.error('Fetch error:', error);
+  }
+}
+
+    //  SSE
+    async function eliLive(url,container,embed=true,callback,runonnew){
+        var runonnew = runonnew || true;
+        var csrf = await fetchData("API/currentcsrf");
+        if (typeof EventSource !== "undefined") {
+            var source = new EventSource(url+"?csrf="+csrf);
+            source.onmessage = function(event) {
+              var jsondata = JSON.parse(event.data);
+              if(runonnew===true && jsondata.status==='new'){
+                if(document.querySelector(container)){
+                  if(embed){
+                      document.querySelector(container).innerHTML = atob(jsondata.message);
+                   }
+                   else
+                   {
+                      document.querySelector(container).insertAdjacentHTML('afterend',atob(jsondata.message));
+                   } 
+                 }
+               }
+
+               if(runonnew === false){
+                if(document.querySelector(container)){
+                  if(embed){
+                      document.querySelector(container).innerHTML = atob(jsondata.message);
+                   }
+                   else
+                   {
+                      document.querySelector(container).insertAdjacentHTML('afterend',atob(jsondata.message));
+                   } 
+                 }
+               }
+               
+
+
+               if(callback){
+                  callback(atob(jsondata.message),jsondata);
+                }
+            };
+
+
+            
+
+          } else {
+            console.error("Sorry! your browser is not updated, Kindly use SSE enabled browser.");
+          }
+    }
+
+    //  SSE Table
+    async function eliTableUpdate(tblelement,embed=true,callback,runonnew){
+        var tedt = document.querySelector(tblelement);
+        var container = tedt.querySelector('tbody') || null;
+        var query = tedt.getAttribute('query') || null;
+        var url = "v/tbldata/"+query+"/";
+        // console.log(template);
+        var runonnew = runonnew || true;
+        var csrf = await fetchData("API/currentcsrf");
+        if (typeof EventSource !== "undefined") {
+            var source = new EventSource(url+"?csrf="+csrf);
+            source.onmessage = function(event) {
+              var jsondata = JSON.parse(event.data);
+              if(runonnew===true && jsondata.status==='new'){
+                if(container){
+                  if(embed){
+                      container.innerHTML = atob(jsondata.message);
+                   }
+                   else
+                   {
+                      container.insertAdjacentHTML('afterend',atob(jsondata.message));
+                   }
+                 }
+               }
+
+               if(runonnew === false){
+                if(container){
+                  if(embed){
+                      container.innerHTML = atob(jsondata.message);
+                   }
+                   else
+                   {
+                      container.insertAdjacentHTML('afterend',atob(jsondata.message));
+                   } 
+                 }
+               }
+               
+
+
+               if(callback){
+                  callback(atob(jsondata.message),jsondata);
+                }
+
+                elitable(tblelement).updatenumbers(tblelement);
+
+            };
+          } else {
+            console.error("Sorry! your browser is not updated, Kindly use SSE enabled browser.");
+          }
+    }
+
+
+  async function eliLiveX(url,container,embed=true,callback){
+        if (typeof EventSource !== "undefined") {
+            var source = new EventSource(url);
+            source.onmessage = function(event) {
+              var jsondata = JSON.parse(event.data);
+              if(document.querySelector(container)){
+                if(embed){
+                    document.querySelector(container).innerHTML = atob(jsondata.message);
+                 }
+                 else
+                 {
+                    document.querySelector(container).insertAdjacentHTML('afterend',atob(jsondata.message));
+                 } 
+               }
+
+               if(callback){
+                  callback(atob(jsondata.message),jsondata);
+                }
+            };
+
+          
+          } else {
+            console.error("Sorry! your browser is not updated, Kindly use SSE enabled browser.");
+          }
+    }
+
 
 
 function wizardSubmit(formid,nextTabhref,options,callback){
@@ -620,4 +761,5 @@ function wizardSubmit(formid,nextTabhref,options,callback){
         callback();
       }        
     }) : console.log("Form not filled properly");
+
 }

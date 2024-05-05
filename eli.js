@@ -1,28 +1,176 @@
-/* EliCSS Framework : 4.0.0 */
+/* EliCSS Framework : 4.3.0 */
 
-var currentScriptPath = function () {
-
-    var scripts = document.querySelectorAll( 'script[src]' );
-    var currentScript = scripts[ scripts.length - 1 ].src;
-    var currentScriptChunks = currentScript.split( '/' );
-    var currentScriptFile = currentScriptChunks[ currentScriptChunks.length - 1 ];
-
-    return currentScript.replace( currentScriptFile, '' );
+const currentScriptPath = () => {
+  const scripts = document.querySelectorAll('script[src]');
+  const currentScript = scripts[scripts.length - 1].src;
+  const isCDN = currentScript.includes('cdn.jsdelivr.net') || currentScript.includes('unpkg.com') || currentScript.includes('npm');
+  if (isCDN) {
+    return currentScript.split('@')[0];
+  }
+  const currentScriptChunks = currentScript.split('/');
+  const currentScriptFile = currentScriptChunks.pop();
+  return currentScript.slice(0, -currentScriptFile.length);
 }
 
-var currentPath = function (){
-    return currentScriptPath().replace(window.location.href,'');
+const currentPath = () => {
+  const currentPath = currentScriptPath().slice(location.origin);
+  return currentPath
 }
 
-// let jspath = currentPath();
-// let jspath = "assets/elicss-main/";
-let jspath = "https://cdn.jsdelivr.net/gh/aj-techsoul/elicss@4.0.2/";
+const jspath = currentPath();
+
+
+// XHR Fixed
+
+if ('XMLHttpRequest' in window) {
+  const xhr = new XMLHttpRequest();
+
+  if(xhr.withCredentials !== undefined) {
+    // Use XMLHttpRequest
+    // console.log('Using XMLHttpRequest');
+  } else {
+    // Use fetch
+    console.log('Using fetch');
+
+    constWithCredentials = (url, options = {}) => {
+      options.credentials = 'include';
+      return fetch(url, options);
+    };
+
+    // Override XMLHttpRequest with fetch
+    window.XMLHttpRequest = function() {
+      return {
+        open: function(method, url, async, user, password) {
+          const options = {
+            method,
+            headers: {
+              'Content-Type': 'application/x-www-formurlencoded'
+            }
+          };
+
+          if (arguments.length > 3) {
+            options.body = user + ':' + password;
+            }
+
+          return new Promise((resolve, reject) => {
+           WithCredentials(url, options)
+              .then(response => {
+                if (response.ok) {
+                  resolve(response);
+                } else {
+                  reject( Error('HTTP error ' + response.status));
+                }
+              })
+              .catch(error => reject(error));
+          });
+        },
+
+        send: function() {
+          // nothing
+        },
+
+        getAllHeaders: function() {
+          // Return empty string
+          return '';
+        },
+
+        getResponse: function() {
+          // Return null
+          return null;
+        },
+
+        onreadystatechange: function() {
+          // Do nothing
+        },
+
+        readyState: 4,
+
+        status: 200,
+
+        statusText: 'OK'
+      };
+    };
+  }
+} else {
+  // Use fetch by default
+  // console.log('Using fetch');
+
+  const fetchWithCredentials = (url, options = {}) => {
+    options.credentials = 'include';
+    return fetch(url, options);
+  };
+
+  // Override XMLHttpRequest with fetch
+  window.XMLHttpRequest = function() {
+    return {
+      open: function(method, url, async, user, password) {
+        const options = {
+          method,
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        };
+
+        if (arguments.length > 3) {
+          options.body = user + ':' + password;
+        }
+
+        return new Promise((resolve, reject) => {
+          fetchWithCredentials(url, options)
+            .then(response => {
+              if (response.ok) {
+                resolve(response);
+              } else {
+                reject(new Error('HTTP error ' + response.status));
+              }
+            })
+            .catch(error => reject(error));
+        });
+      },
+
+      send: function() {
+        // Do nothing
+      },
+
+      getAllResponseHeaders: function() {
+        // Return empty string
+        return '';
+      },
+
+      getResponseHeader: function() {
+        // Return null
+        return null;
+      },
+
+      onreadystatechange: function() {
+        // Do nothing
+      },
+
+      readyState: 4,
+
+      status: 200,
+
+      statusText: 'OK'
+    };
+  };
+}
+
+//
+
+// == Loading ==
+
+if(!document.querySelector("body").classList.contains("loading")){
+  document.querySelector("body").classList.add("loading");
+}
+
+// =======
+
 
 function toast(){
   let body = document.body;
   var script = '<div class="toast result"></div>'
   body.innerHTML += script;
-  console.log('Eli: Site Ready!');
+  console.log('%c✔ %cEli: Site Ready!', 'color: green; font-size: 16px;', 'background: green; color: white; padding: 8px;');
 }
 
 function RunScript(selector,jsscript){
@@ -95,6 +243,33 @@ async function checkmobility(){
   }
 }
 
+
+function eliloader(element, duration) {  
+  // Define keyframes
+  var keyframes = [
+    { opacity: 0 },
+    { opacity: 1 }
+  ];
+
+  // Define animation options
+  var options = {
+    duration: duration || 1000,
+    easing: 'ease-in-out'
+  };
+
+  // Create the animation
+  var animation = element.animate(keyframes, options);
+
+  // Set the element's opacity to 0 initially
+  element.style.opacity = 1;
+
+  // Play the animation
+  animation.play();  
+  document.querySelector('body.loading').classList.remove("loading");
+}
+
+
+
       toast();      
       
 
@@ -135,8 +310,18 @@ window.addEventListener('load', async function(){
           document.querySelectorAll('.input-field > label').forEach( function(item, index) {
             item.classList.add('active');
           });
-          //setTimeout(UpdateFields,3000);
+          setTimeout(UpdateFields,3000);
       }
 
    await checkmobility();
+
+// == Loading ==
+     eliloader(document.querySelector("body",500));
+  // run autorun after load
+  if (typeof autorun === "function") {
+    // safe to use the function
+    autorun();
+  }
+//=============
+
 });

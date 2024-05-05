@@ -12,7 +12,14 @@ function elitable(selector){
             self.pagein(el);
             self.scrollin(el);
         }),
-        initialize: (htmlelement) => self.element.forEach((el) => {            
+        initialize: (htmlelement) => self.element.forEach((el) => {
+
+            if(el.hasAttribute('query')){
+
+                    let eqvla = window.btoa(unescape(encodeURIComponent(el.getAttribute('query'))));
+                   el.setAttribute('query',eqvla);
+            }
+
             if(el.closest(".elitable_body")){
                 var inits = false;
             }

@@ -22,9 +22,9 @@
     --h5-lh : calc(var(--h5) / var(--lineheight));
     --h6-lh : calc(var(--h6) / var(--lineheight));
 
-    --g-weight: 500;
-    --h1-3-bold : 700;
-    --h4-6-bold : 500; 
+    --g-weight: 300;
+    --h1-3-bold: 600;
+    --h4-6-bold: 400;
 
     --letter-space : -.8px;
     --letter-space-general : .05em;
@@ -63,18 +63,17 @@ audio:not([controls]) {
 
 /* Typography */
 
-h1,h2,h3,h4,h5,h6,strong,b { margin:0px; font-weight:500; letter-spacing:var(--letter-space-general); display:block }
-h1,.h1 { font-size:var(--h1); line-height:var(--h1-lh); letter-spacing:var( --letter-space); font-weight: var(--h1-3-bold); }
-h2,.h2 { font-size:var(--h2); line-height:var(--h2-lh); letter-spacing:var( --letter-space);  font-weight: var(--h1-3-bold); }
-h3,.h3 { font-size:var(--h3); line-height:var(--h3-lh); letter-spacing:var( --letter-space); font-weight: var(--h1-3-bold); }
-h4,.h4 { font-size:var(--h4); line-height:var(--h4-lh); letter-spacing:var( --letter-space); font-weight: var(--h4-6-bold); }
-h5,.h5 { font-size:var(--h5); line-height:var(--h5-lh); letter-spacing:var( --letter-space); font-weight: var(--h4-6-bold); }
-h6,.h6 { font-size:var(--h6); line-height:var(--h6-lh); letter-spacing:var( --letter-space); font-weight: var(--h4-6-bold); }
+h1,h2,h3,h4,h5,h6,strong,b { margin:0px; font-weight:var(--g-weight); letter-spacing:var(--letter-space-general); display:block }
+h1,.h1 { font-size:var(--h1); line-height:var(--h1-lh); letter-spacing:var( --letter-space); font-weight:var(--h1-3-bold); }
+h2,.h2 { font-size:var(--h2); line-height:var(--h2-lh); letter-spacing:var( --letter-space);  font-weight:var(--h1-3-bold); }
+h3,.h3 { font-size:var(--h3); line-height:var(--h3-lh); letter-spacing:var( --letter-space); font-weight:var(--h1-3-bold); }
+h4,.h4 { font-size:var(--h4); line-height:var(--h4-lh); letter-spacing:var( --letter-space); font-weight:var(--h4-6-bold); }
+h5,.h5 { font-size:var(--h5); line-height:var(--h5-lh); letter-spacing:var( --letter-space); font-weight:var(--h4-6-bold); }
+h6,.h6 { font-size:var(--h6); line-height:var(--h6-lh); letter-spacing:var( --letter-space); font-weight:var(--h4-6-bold); }
 
 
 @media (max-width:800px){
-img {display: block; max-width:100%; max-height:100%; margin:0 auto; }
-
+  img {display: block; max-width:100%; max-height:100%; margin:0 auto; }
 }
 
 strong { font-size:1em; font-weight:700; }

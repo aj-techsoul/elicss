@@ -50,19 +50,21 @@
 .elitable_body table tbody tr:hover > td.elitable-actions { -webkit-animation:fadeInRight .5s; animation:fadeInRight .5s; opacity:1; display:-ms-grid; display:grid; grid-auto-flow: column; grid-gap:.5em; }
 .elitable_body table tbody tr:hover > td.elitable-actions .btn { background:transparent; border-radius:100%; width:25px; height:25px; padding:.5em; font-size:1em; display: -ms-grid; display: grid; justify-items: center; text-align: center; align-content:center; -ms-grid-columns:1fr; grid-template-columns:1fr; margin: 0px; color:var(--elitable_color); transition:.5s all; }
 .elitable_body table tbody tr:hover > td.elitable-actions .btn:hover { text-shadow:1px 1px 3px rgba(0,0,0,0.2); }
-.elitable_body table tbody .status { background:var(--editable_status_default); display:inline; padding:.2em .5em; font-size:.7em; -ms-grid-column-align:right; justify-self:right; width: -webkit-min-content; width: -moz-min-content; width: min-content; position: absolute; right:0px; margin:.2em .5em; top:calc(50% - 10px); }
+.elitable_body table tbody .status { background:var(--editable_status_default); border-radius: var(--radius); display:inline; padding:.2em .5em; font-size:.5em; -ms-grid-column-align:right; justify-self:right; width: -webkit-min-content; width: -moz-min-content; width: min-content; position: absolute; right:0px; margin:.2em .5em; top:calc(50% - 10px); text-transform:uppercase; }
 .elitable_body table tbody .status.active,
 .elitable_body table tbody .status.published,
 .elitable_body table tbody .status.selling,
 .elitable_body table tbody .status.on,
 .elitable_body table tbody .status.activated,
-.elitable_body table tbody .status.online { background:var(--editable_status_active); }
+.elitable_body table tbody .status.online { background:var(--editable_status_active); color:rgba(255,255,255,.8); }
 .elitable_body table tbody .status.inactive,
 .elitable_body table tbody .status.unpublished,
 .elitable_body table tbody .status.notselling,
 .elitable_body table tbody .status.off,
 .elitable_body table tbody .status.deactivated,
-.elitable_body table tbody .status.offline { background:var(--editable_status_inactive); }
+.elitable_body table tbody .status.offline { background:var(--editable_status_inactive); color:rgba(255,255,255,.8); }
+
+.elitable_body table tbody td.status-field { padding-right:50px; vertical-align:middle; }
 
 /* SVG Progress bar */
 .progress-ring__circle {

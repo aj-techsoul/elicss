@@ -50,7 +50,7 @@ input { text-align:justify; transition:.5s all;  }
 input:focus { text-align:justify; }
 input,select,textarea { font-family:sans-serif; font-size:1rem;  }
 
-.input-field { background:rgba(255,255,255,1); border:2px solid rgba(0,0,0,.1); position: relative; padding:0em; border-radius:var(--radius); transition:.3s all; display: grid; align-items: center; margin:var(--margin); -webkit-transition:.3s all; -moz-transition:.3s all; -ms-transition:.3s all; -o-transition:.3s all; }
+.input-field { background:rgba(255,255,255,1); border:1px solid var(--bordercolor); position: relative; padding:0em; border-radius:var(--radius); transition:.3s all; display: grid; align-items: center; margin:var(--margin); -webkit-transition:.3s all; -moz-transition:.3s all; -ms-transition:.3s all; -o-transition:.3s all; }
 .input-field:hover,.input-field:focus { border-color: var(--input-border-color); }
 
 .input-field.invert { background:inherit; }
