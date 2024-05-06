@@ -61,6 +61,21 @@ audio:not([controls]) {
 }
 
 
+/* = Loading =  */
+body.loading > * { display:none; }
+body.loading::after {  content:""; 
+  background-image: linear-gradient(33deg, rgba(134,134,134,1) 0%, rgba(255,255,255,1) 22%, rgba(140,137,137,1) 100%);
+  animation:loadingpage 1s infinite;  transition:1s all ease-in-out; margin:0 auto; display: grid; background-size:100%; justify-content:center; align-items: center;
+  color:rgba(0,0,0,.7); position:fixed; top:0; left:0; right:0; bottom:0; z-index:99; width:100%; height:100%; 
+}
+
+@keyframes loadingpage {
+  0% {   transform:rotate(0deg) scale(2); }
+  100% {   transform:rotate(360deg) scale(4); }
+}
+
+/* == */
+
 /* Typography */
 
 h1,h2,h3,h4,h5,h6,strong,b { margin:0px; font-weight:var(--g-weight); letter-spacing:var(--letter-space-general); display:block }
