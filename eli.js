@@ -244,7 +244,7 @@ async function checkmobility(){
 }
 
 
-function eliloader(element, duration) {  
+function eliloader(element, duration) {
   // Define keyframes
   var keyframes = [
     { opacity: 0 },
@@ -302,9 +302,16 @@ function eliloader(element, duration) {
 
 
 window.addEventListener('load', async function(){
-    new elislider();
     elitable(".edt").init();
     setTimeout(function(){ searchable(".eli-searchable").searchable(); searchable(".eli-searchable-select").selectbox() },1000);
+
+  setTimeout(function(){  
+    new elislider();
+    window.addEventListener('resize',()=>{
+      new elislider();
+    });
+  },1000);
+
     //  Custom Code
     if(document.querySelector('.input-field')){
           document.querySelectorAll('.input-field > label').forEach( function(item, index) {
@@ -316,7 +323,7 @@ window.addEventListener('load', async function(){
    await checkmobility();
 
 // == Loading ==
-     eliloader(document.querySelector("body",500));
+     eliloader(document.querySelector("body",100));
   // run autorun after load
   if (typeof autorun === "function") {
     // safe to use the function
