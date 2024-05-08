@@ -885,6 +885,6 @@ function doneBTN(data=""){
   setTimeout(function(){
     document.querySelector(".donebtn")?.classList.remove(type);  
     document.querySelector(".donebtn")?.classList.remove("donebtn");
-    document.querySelector(".modal.active").classList.remove('active');
+    document.querySelector(".modal.active")?.classList.remove('active');
   },3000)
 }
