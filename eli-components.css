@@ -158,3 +158,12 @@ html [bgsrc][position="right"] { background-position:right; }
 html [bgsrc][position="center"] { background-position:center; }
 html [bgsrc][parallax] { background-attachment:fixed; }
 /* == */
+
+/* == ProcessBTN == */
+.processbtn::before { content:'\F0766'; font-family: "Material Design Icons"; color:inherit; font-size: 1.5em; animation: zoomIn 1s infinite; position: absolute; top: .1em; left: .5em; pointer-events:none; }
+.processbtn { pointer-events:none; cursor:wait;}
+.donebtn::before { content:'\F012D'; font-family: "Material Design Icons"; color:inherit; font-size: 1.5em; animation: zoomIn 1s; position: absolute; top: .1em; left: .5em; }
+.donebtn.success::before { content:'\F012D'; }
+.donebtn.fail::before { content:'\F002A'; }
+/* === */
+

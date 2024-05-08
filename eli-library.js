@@ -162,15 +162,18 @@ function esend(formid,callback){
       const files = document.querySelectorAll('[type=file]');
       const formData = new FormData(form);
       const progressbar = document.querySelector('.progress');
-
+      console.log(files.length);
       if(files.length > 0){
         files.forEach((input) => {
+          if(!input.classList.contains('swal2-file')){
+          
           var fileinputname = input.attributes.name.value;
           for (let i = 0; i < input.files.length; i++) {
             let file = input.files[i];
 
             formData.append(fileinputname+'[]', file);
           }
+        }
         })
       }
       else {
@@ -762,4 +765,126 @@ function wizardSubmit(formid,nextTabhref,options,callback){
       }        
     }) : console.log("Form not filled properly");
 
+}
+
+//  Process Btn
+function processSubmit(formid) {
+  var currentbtn = event.target;  
+      console.log('Analyzing '+formid);
+      var form = document.querySelector(formid);
+      var required =  document.querySelectorAll(formid+" [required] ");
+  //  console.log(required);
+      console.log(required.length +  " Required fields found");
+  //  console.log(required);
+      var checked = 0;
+    if(required.length > 0){
+      var i = 0;
+      required.forEach((field) => {
+        var x = field;
+
+        console.log(required[i].validity.valid);
+        if(required[i].validity.valid == false || checkvalidity(required[i]) == false ){
+          required[i].validationMessage = " Please fill "+field.getAttribute('label');
+          //console.log(i+" Please fill "+field.getAttribute('label'));
+          if(required[i].offsetParent){
+          required[i].offsetParent.style.borderColor = 'red';
+          }
+          x.addEventListener('change', function(e) {
+            console.log(e.target.validity.valid);
+
+            var inp = e.target;
+            if(inp.validity.valid == false  || checkvalidity(inp) == false ){
+                inp.validationMessage = " Please fill "+field.getAttribute('label');
+                inp.offsetParent.style.borderColor = 'red';
+              }
+              else {
+                  inp.offsetParent.style.borderColor = 'green';
+              }
+          });
+
+        }
+        else {
+          //console.log("filled "+ field.value);
+            if(required[i].offsetParent){
+              required[i].offsetParent.style.borderColor = 'green';
+            }
+
+              checked = checked+1;
+        }
+        i++;
+      })
+      form.reportValidity();
+    }
+
+    // console.log(required.length + " : " + checked);
+    if(required.length == checked){
+      currentbtn.classList.add("processbtn");
+      eli(formid).submit(doneBTN);
+    }
+
+}
+
+function doneBTN(data=""){
+              var tag = "Success";
+              var tag2 = "success";
+
+              if(data.result.indexOf(tag) !== -1 || data.result.indexOf(tag2) !== -1){
+
+                const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 1500,
+                timerProgressBar: true,
+                onOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+                })
+
+                Toast.fire({
+                icon: 'success',
+                title: data.result
+                })
+
+                var type = "success";
+
+
+            }
+            else
+            {
+              
+              const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                onOpen: (toast) => {
+                  toast.addEventListener('mouseenter', Swal.stopTimer)
+                  toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+              })
+
+              Toast.fire({
+                icon: 'error',
+                title: data.result
+              })
+
+
+              var type = "fail";
+            }
+
+// ===================
+
+
+  document.querySelector(".processbtn")?.classList.add("donebtn");
+  document.querySelector(".processbtn")?.classList.add(type);  
+  document.querySelector(".processbtn")?.classList.remove("processbtn");  
+
+  setTimeout(function(){
+    document.querySelector(".donebtn")?.classList.remove(type);  
+    document.querySelector(".donebtn")?.classList.remove("donebtn");
+    document.querySelector(".modal.active").classList.remove('active');
+  },3000)
 }
