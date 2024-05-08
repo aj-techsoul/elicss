@@ -42,3 +42,10 @@ alinks.forEach((alink) => {
   });
 });
 /////////
+//  Eli BGSRC
+if(document.querySelectorAll('[bgsrc]').length > 0){
+  document.querySelectorAll('[bgsrc]').forEach(bgx=>{
+      var bgsrc = bgx.getAttribute('bgsrc');
+      bgx.style.backgroundImage = "url("+bgsrc+")";
+  })
+}

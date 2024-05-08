@@ -9,7 +9,7 @@ function elislider(elem,option){
 		options.startindex= options.startindex || slider.getAttribute('startindex') || 0;
         options.slidetoscroll= options.slidetoscroll || slider.getAttribute('slidetoscroll') || 1;
         options.slidetoshow= options.slidetoshow || slider.getAttribute('slidetoshow') || 3;
-        options.gap= options.gap || slider.getAttribute('gap') || 10;
+        options.gap= options.gap || slider.getAttribute('gap') || 0;
         options.cover= options.cover || slider.getAttribute('cover') || true;
         options.height= options.height || slider.getAttribute('height') || 'auto';
 
@@ -29,16 +29,22 @@ function elislider(elem,option){
         // total slides
         var totalslides = slidertrack.children;
        	// per slide width
+        // alert(totalslidescount);
+
+        // console.log(slidertrack.clientWidth);
+
+        var scwidth = slidertrack.clientWidth || slidertrack.scrollWidth;
         if(totalslidescount >= options.slidetoshow){
-       	  var perslidewidth = slidertrack.clientWidth / options.slidetoshow;
+       	  var perslidewidth = scwidth / options.slidetoshow;
         }
         else
         {
-          var perslidewidth = slidertrack.clientWidth / totalslidescount;
+          var perslidewidth = scwidth / slidetoshow;
+          // alert(perslidewidth);
         }
 
         // console.log(slider);
-       	console.log("perslidewidth - "+ perslidewidth);
+       	// console.log("perslidewidth - "+ perslidewidth);
        //	console.log(document.querySelector('body').scrollWidth);
        	
        	
@@ -57,7 +63,17 @@ function elislider(elem,option){
         // placement
         for(i=0; i < totalslidescount; i++) {
         	slide = slidertrack.children[i];
-        	slide.style.width = parseInt(perslidewidth - (options.gap / 2))+"px";
+          var slidewidth = parseInt(perslidewidth - (options.gap / 2));
+          if(slidewidth == 0){
+            slidewidth = '100';
+          }
+
+          var slidemessurement = "%";
+          if(scwidth > 100){
+             slidemessurement = "px";
+          }
+
+        	slide.style.width = slidewidth+slidemessurement;
 
           // slide click
           slide.addEventListener('click',function(e){
@@ -74,8 +90,10 @@ function elislider(elem,option){
         }
         // Initial Active Slide 
         var iactslide = slidertrack.children[options.startindex];
+        // console.log(iactslide);
         if(typeof iactslide !== 'undefined'){
             iactslide.classList.add("active");
+            slidertrack.scrollLeft = iactslide.offsetLeft;
         }
         /////////////////////////////////////////////////////////          
         // Events

@@ -144,3 +144,17 @@ alink {
   cursor: pointer;
 }
 
+
+
+/* = BGSRC = */
+html [bgsrc] { display: grid; background-size:cover; background-position: center; background-repeat:no-repeat; }
+html [bgsrc][cover="false"],html [bgsrc][contain] { background-size:contain!important; }
+html [bgsrc][cover="true"] { background-size:cover!important; }
+html [bgsrc][repeat] { background-repeat:repeat; }
+html [bgsrc][position="top"] { background-position:top; }
+html [bgsrc][position="bottom"] { background-position:bottom; }
+html [bgsrc][position="left"] { background-position:left; }
+html [bgsrc][position="right"] { background-position:right; }
+html [bgsrc][position="center"] { background-position:center; }
+html [bgsrc][parallax] { background-attachment:fixed; }
+/* == */
