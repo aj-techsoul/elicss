@@ -227,20 +227,30 @@ async function checkmobility(){
   var favlink = '<link rel="icon" type="image/png" href="'+ jspath +'logo.png">';
   var favlink2 = '<link rel="icon" type="image/png" href="'+favicon+'">';
 
-  if(!document.querySelector('link[rel=icon]')){
-   var http = new XMLHttpRequest();
-    http.open('GET', favicon, false); 
-    http.send(); 
-    // console.log(http);
+var favicon = "assets/img/logo.png";
+var favlink = '<link rel="icon" type="image/png" href="'+ jspath +'logo.png">';
+var favlink2 = '<link rel="icon" type="image/png" href="'+favicon+'">';
 
-    if (http.status === 200) { 
-      eli('head').prepend(favlink2);
-     }
-     else
-      {
-        eli('head').prepend(favlink);
-      }
-  }
+if(!document.querySelector('link[rel=icon]')) {
+    fetch(favicon)
+        .then(response => {
+            if (response.ok) {
+                return Promise.resolve(response.blob());
+            } else {
+                throw new Error('Failed to fetch favicon');
+            }
+        })
+        .then(blob => {
+            var objectURL = URL.createObjectURL(blob);
+            favlink2 = '<link rel="icon" type="image/png" href="'+ objectURL +'">';
+            document.querySelector('head').insertAdjacentHTML('beforeend', favlink2);
+        })
+        .catch(error => {
+            console.error('Error fetching favicon:', error);
+            document.querySelector('head').insertAdjacentHTML('beforeend', favlink);
+        });
+}
+
 }
 
 
