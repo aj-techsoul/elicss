@@ -216,34 +216,38 @@ async function loadCSS(url)
     head.appendChild(script);
 }
 
-async function checkmobility() {
-    /* Responsive */
-    var meta = '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
-    if (!document.querySelector('meta[name=viewport]')) {
-        eli('head').prepend(meta);
-    }
-    /* Favicon */
-    var favicon = "assets/img/logo.png";
-    var favlink = '<link rel="icon" type="image/png" href="' + jspath + 'logo.png">';
-    var favlink2 = '<link rel="icon" type="image/png" href="' + favicon + '">';
+async function checkmobility(){
+  /* Responsive */
+  var meta = '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
+  if(!document.querySelector('meta[name=viewport]')){
+    eli('head').prepend(meta);
+  }
+  /* Favicon */
+  var favicon = "assets/img/logo.png";
+  var favlink = '<link rel="icon" type="image/png" href="'+ jspath +'elilogo.png">';
+  var favlink2 = '<link rel="icon" type="image/png" href="'+favicon+'">';
 
-    if (!document.querySelector('link[rel=icon]')) {
-        try {
-            const response = await fetch(favicon);
+
+if(!document.querySelector('link[rel=icon]')) {
+    fetch(favicon)
+        .then(response => {
             if (response.ok) {
-                const blob = await response.blob();
-                var objectURL = URL.createObjectURL(blob);
-                favlink2 = '<link rel="icon" type="image/png" href="' + objectURL + '">';
-                document.querySelector('head').insertAdjacentHTML('beforeend', favlink2);
+                return Promise.resolve(response.blob());
             } else {
-                console.error('Failed to fetch favicon');
-                document.querySelector('head').insertAdjacentHTML('beforeend', favlink);
+                throw new Error('Failed to fetch favicon');
             }
-        } catch (error) {
+        })
+        .then(blob => {
+            var objectURL = URL.createObjectURL(blob);
+            favlink2 = '<link rel="icon" type="image/png" href="'+ objectURL +'">';
+            document.querySelector('head').insertAdjacentHTML('beforeend', favlink2);
+        })
+        .catch(error => {
             console.error('Error fetching favicon:', error);
             document.querySelector('head').insertAdjacentHTML('beforeend', favlink);
-        }
-    }
+        });
+}
+
 }
 
 
