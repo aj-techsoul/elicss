@@ -327,6 +327,16 @@ window.addEventListener('load', async function(){
           setTimeout(UpdateFields,3000);
       }
 
+      // FormBTN
+      if(document.querySelector('formbtn')){
+        document.querySelectorAll('formbtn').forEach(fbtn=>{
+        fbtn.addEventListener("click",function(e){
+          eliFormBTN(fbtn);
+        })
+        })
+      }
+
+
    await checkmobility();
 
 // == Loading ==

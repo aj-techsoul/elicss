@@ -889,3 +889,102 @@ function doneBTN(data=""){
     document.querySelector(".modal.active")?.classList.remove('active');
   },3000)
 }
+
+
+function doneFormBTN(data="",embed=false){
+              var tag = "Success";
+              var tag2 = "success";
+
+              if(typeof data == 'string'){
+                var datax = data;
+              }
+              else
+              {
+                var datax = data.result;
+              }
+
+if(embed){
+    document.querySelector(embed).innerHTML = datax;
+}
+else
+{
+            if(datax.indexOf(tag) !== -1 || datax.indexOf(tag2) !== -1){
+
+              const Toast = Swal.mixin({
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timer: 1500,
+              timerProgressBar: true,
+              onOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer)
+              toast.addEventListener('mouseleave', Swal.resumeTimer)
+              }
+              })
+
+              Toast.fire({
+              icon: 'success',
+              title: datax
+              })
+
+              var type = "success";
+
+
+              }
+              else
+              {
+
+              const Toast = Swal.mixin({
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+              onOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer)
+              toast.addEventListener('mouseleave', Swal.resumeTimer)
+              }
+              })
+
+              Toast.fire({
+              icon: 'error',
+              title: datax
+              })
+
+
+              var type = "fail";
+              }
+}
+
+
+
+// ===================
+
+
+  document.querySelector(".processbtn")?.classList.add("donebtn");
+  document.querySelector(".processbtn")?.classList.add(type);  
+  document.querySelector(".processbtn")?.classList.remove("processbtn");  
+
+  setTimeout(function(){
+    document.querySelector(".donebtn")?.classList.remove(type);  
+    document.querySelector(".donebtn")?.classList.remove("donebtn");
+    document.querySelector(".modal.active")?.classList.remove('active');
+  },3000)
+}
+
+
+function eliFormBTN(el){
+    // Correct the typo in getAttribute
+    var action = el.getAttribute("action");
+    var datax = el.getAttribute("data") || "";
+    var method = el.getAttribute("method") || 'POST';
+    var embed = el.getAttribute("embed") || false; // Convert string to boolean
+
+    // Encode datax properly for URL encoding
+    datax = encodeURIComponent(datax);
+    el.classList.add("processbtn");
+    // Assuming epost is a defined function that handles the request
+    epost(action, "data=" + datax, function(data){
+         doneFormBTN(data,embed);
+    });
+}
