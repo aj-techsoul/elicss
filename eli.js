@@ -1,4 +1,4 @@
-/* EliCSS Framework : 4.3.3 */
+/* EliCSS Framework : 4.4.3 */
 
 const currentScriptPath = () => {
   const scripts = document.querySelectorAll('script[src]');
