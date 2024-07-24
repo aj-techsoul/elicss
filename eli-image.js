@@ -13,6 +13,7 @@
 
 
 function init(imgfields){
+imgfields = imgfields || [];
 //console.log(imgfields.length);
 	imgfields.forEach(function(item){
 		item.addEventListener('change',async function(e){			
@@ -61,6 +62,7 @@ function init(imgfields){
 }
 
 function init2(imgfields,append){
+	imgfields = imgfields || [];
 	append = append || true;
 // console.log(imgfields.length);
 	imgfields.forEach(function(item){
