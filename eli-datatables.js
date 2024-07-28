@@ -1,3 +1,12 @@
+function isValidURL(string) {
+    try {
+        new URL(string, window.location.href); // Use the current page's URL as the base
+        return true;
+    } catch (_) {
+        return false;
+    }
+}
+
 function elitable(selector){ 
     var i = 0;
     const self =
@@ -5,12 +14,23 @@ function elitable(selector){
         element: document.querySelectorAll(selector),
         length : document.querySelectorAll(selector).length,
         init: (htmlelement) => self.element.forEach((el) => {
+            self.updateDataLink(el);
+            // self.initialize(el);
+            // self.multiselect(el);
+            // self.search(el);
+            // self.sort(el);
+            // self.pagein(el);
+            // self.scrollin(el);
+            // self.updateData(el);        
+        }),
+        refresh:(htmlelement) => self.element.forEach((el) => {
             self.initialize(el);
             self.multiselect(el);
             self.search(el);
             self.sort(el);
             self.pagein(el);
             self.scrollin(el);
+            // self.updateData(el);
         }),
         initialize: (htmlelement) => self.element.forEach((el) => {
 
@@ -97,52 +117,62 @@ function elitable(selector){
             });
 
         }),
-        sort: (htmlelement) => self.element.forEach((el) => {            
-            var ths = el.querySelectorAll("thead th") || el.querySelectorAll("thead td");
+        sort: (htmlelement) => self.element.forEach((el) => {
+            const ths = el.querySelectorAll("thead td, thead th");
 
-            var getCellValue = function(tr, idx){ return tr.children[idx].innerText || tr.children[idx].textContent; }
+            const getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;
 
-            var cancelsortingorder = function(idx=""){
+            const cancelSortingOrder = () => {
                 ths.forEach(th => {
                     th.classList.remove('asc');
                     th.classList.remove('desc');
-                })
-            } 
-            var comparer = function(idx, asc) {  
+                });
+            };
 
-                if(asc){
-                    cancelsortingorder();
-                    ths[idx].classList.add("asc");
-                }
-                else
-                {
-                    cancelsortingorder();
-                    ths[idx].classList.add("desc");
-                }
-
-                return function(a, b) { return function(v1, v2) {
+            const comparer = (idx, asc) => {
+                return (a, b) => {
+                    const v1 = getCellValue(asc ? a : b, idx);
+                    const v2 = getCellValue(asc ? b : a, idx);
                     return v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2);
-                }(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx));
-            }};            
-            
-            
-            if(ths.length > 0){
-            var thindex = 0;
-            ths.forEach(th =>{
-            th.addEventListener("click",function(e) {
-                // console.log(e.target.innerText);
-                
-            var table = el;
-            var tblbody = el.querySelector("tbody");
-                while(table.tagName.toUpperCase() != 'TABLE') table = table.parentNode;
-                Array.prototype.slice.call(tblbody.querySelectorAll('tr:nth-child(n+2)'))
-                    .sort(comparer(Array.prototype.slice.call(th.parentNode.children).indexOf(th), this.asc = !this.asc))
-                    .forEach(function(tr) { tblbody.appendChild(tr) });                                   
+                };
+            };
 
-                thindex++;
-           })   
-           }) 
-           }
+            if (ths.length > 0) {
+                ths.forEach((th, thIndex) => {
+                    th.addEventListener("click", function() {
+                        const tbody = el.querySelector("tbody");
+                        const isDescending = this.classList.contains('desc');
+                        const isAscending = this.classList.contains('asc');
+
+                        console.log(th," - ",isDescending);
+
+                        // Cancel the current sorting order
+                        cancelSortingOrder();
+
+                        if (isDescending) {
+                            // If the header has the 'desc' class, sort in ascending order
+                            Array.from(tbody.querySelectorAll('tr'))
+                                .sort(comparer(thIndex, true))
+                                .forEach(tr => tbody.appendChild(tr));
+                            this.classList.remove('desc');
+                            this.classList.add('asc');
+                        } else if (isAscending) {
+                            // If the header has the 'asc' class, sort in descending order
+                            Array.from(tbody.querySelectorAll('tr'))
+                                .sort(comparer(thIndex, false))
+                                .forEach(tr => tbody.appendChild(tr));
+                            this.classList.remove('asc');
+                            this.classList.add('desc');
+                        } else {
+                            // Default: sort in ascending order
+                            Array.from(tbody.querySelectorAll('tr'))
+                                .sort(comparer(thIndex, true))
+                                .forEach(tr => tbody.appendChild(tr));
+                            this.classList.add('asc');
+                        }
+                    });
+                });
+            }
         }),
         pagein: (htmlelement) => self.element.forEach((el) => {
             var edt_container = el.parentElement.parentElement;
@@ -363,14 +393,97 @@ function elitable(selector){
         }),
         update: (htmlelement) => self.element.forEach((el) => {            
                 self.updatenumbers(el);              
+        }),
+        updateData: (htmlelement) => self.element.forEach((el) => {            
+                if(el.getAttribute('data-url')){
+                    var dataurl = el.getAttribute('data-url');
+                    eget(dataurl,'',function(data){
+                        /////////////////////
+                        const tbody = el.querySelector('tbody');
+                        const templateRow = el.querySelector('tr[template]');
+                        data = JSON.parse(data);
+                        data.forEach(item => {
+                            const newRow = templateRow.cloneNode(true);
+
+                            newRow.removeAttribute('template');
+                            newRow.id = newRow.id.replace('{{id}}', item.id || '');
+
+                            let newRowHTML = newRow.innerHTML;
+
+                            // Replace placeholders with actual data or leave them blank if not present
+                            Object.keys(item).forEach(key => {
+                                const regex = new RegExp(`{{${key}}}`, 'g');
+                                newRowHTML = newRowHTML.replace(regex, item[key] || '');
+                            });
+
+                            // Replace any remaining placeholders with an empty string
+                            newRowHTML = newRowHTML.replace(/{{\w+}}/g, '');
+
+                            newRow.innerHTML = newRowHTML;
+
+                            tbody.appendChild(newRow);
+                        });
+
+                        // templateRow.remove(); // Remove the template row after use
+                        /////////////////////
+                        self.refresh();
+                    })
+                    // console.log(dataurl);
+                }
+        }),
+        updateDataLink: (htmlelement) => self.element.forEach((el) => {
+               
+                if(el.getAttribute('data-url')){
+                    var dataurl = el.getAttribute('data-url');
+                    if(!isValidURL(dataurl)){
+                        dataurl = atob(dataurl);
+                    }
+                    el.setAttribute('data-url',btoa(dataurl));
+                    
+                    eget(dataurl,'',function(data){
+                        /////////////////////
+                        const tbody = el.querySelector('tbody');
+                        const templateRow = el.querySelector('tr[template]');
+                        if(typeof data != 'object'){
+                            data = JSON.parse(data);
+                        }
+                        // check if the data is inside data variable
+                        if(data.data){
+                            var data = data.data;
+                        }
+                        data.forEach(item => {
+                            const newRow = templateRow.cloneNode(true);
+
+                            newRow.removeAttribute('template');
+                            newRow.id = newRow.id.replace('{{id}}', item.id || '');
+
+                            let newRowHTML = newRow.innerHTML;
+
+                            // Replace placeholders with actual data or leave them blank if not present
+                            Object.keys(item).forEach(key => {
+                                const regex = new RegExp(`{{${key}}}`, 'g');
+                                newRowHTML = newRowHTML.replace(regex, item[key] || '');
+                            });
+
+                            // Replace any remaining placeholders with an empty string
+                            newRowHTML = newRowHTML.replace(/{{\w+}}/g, '');
+
+                            newRow.innerHTML = newRowHTML;
+
+                            tbody.appendChild(newRow);
+                        });
+
+                        // templateRow.remove(); // Remove the template row after use
+                        /////////////////////
+                                                
+                            self.refresh();
+                    })
+                    // console.log(dataurl);
+                }
         })
-        
 
 
     }
 
     return self;
 }
-
-
-                
