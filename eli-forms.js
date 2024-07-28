@@ -1,4 +1,4 @@
-function init(){
+function forminit(){
 
 //Some Function
 function disableScroll() {
@@ -743,4 +743,4 @@ const tabActive = function(href){
 
 
 
-window.addEventListener('load', init(), false );
+window.addEventListener('load', forminit(), false );
