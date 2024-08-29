@@ -26,13 +26,20 @@ document.querySelectorAll('.tabs a').forEach(item => {
   item.addEventListener('click', async function (e) {
     e.preventDefault();
 
-    document.querySelectorAll(".tabs li.active").forEach(ditem =>{
-      ditem.classList.remove("active");
-    })
+    var tabref = this.getAttribute('href') || this.getAttribute('tabhref');
+    
+    if(this.parentElement.parentElement.querySelectorAll('li.active').length){
+      this.parentElement.parentElement.querySelectorAll('li.active').forEach(itm=>{
+        itm.classList.remove('active');
+      })
+    }
 
-    document.querySelectorAll(".tab-content.active").forEach(d2item =>{
-      d2item.classList.remove("active");
-    })
+
+    if(document.querySelector(tabref+".tab-content").parentElement.querySelectorAll('.tab-content.active').length){
+      document.querySelector(tabref+".tab-content").parentElement.querySelectorAll('.tab-content.active').forEach(itm=>{
+        itm.classList.remove('active');
+      })
+    }
 
  // console.log(e);
     if(e.target.parentElement.nodeName === 'LI'){
@@ -50,6 +57,7 @@ document.querySelectorAll('.tabs a').forEach(item => {
 
  });
 })
+
 
 // search result
 function searchResultClicked(field){
