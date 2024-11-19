@@ -15,13 +15,13 @@ function elitable(selector){
         length : document.querySelectorAll(selector).length,
         init: (htmlelement) => self.element.forEach((el) => {
             self.updateDataLink(el);
-            // self.initialize(el);
-            // self.multiselect(el);
-            // self.search(el);
-            // self.sort(el);
-            // self.pagein(el);
-            // self.scrollin(el);
-            // self.updateData(el);        
+             self.initialize(el);
+             self.multiselect(el);
+             self.search(el);
+             self.sort(el);
+             self.pagein(el);
+             self.scrollin(el);
+             self.updateData(el);        
         }),
         refresh:(htmlelement) => self.element.forEach((el) => {
             self.initialize(el);
